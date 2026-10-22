@@ -1,58 +1,121 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Busca</title>
+    <title>Buscar atividades - ConectaSaude</title>
+
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-    <header>
-    <img src="imagens/Logo_Miniatura.png" alt="Logo ConectaSaude">
+    <header class="cabecalho-site">
+        <a href="Apresentacao.html" class="link-logo">
+            <img src="imagens/Logo_Miniatura.png"
+                 alt="Logo ConectaSaude"
+                 class="logo-site">
+        </a>
 
-    <nav>
-        <a href="feed.html">Feed</a>
-        <a href="Busca.html">Buscar</a>
-        <a href="postar.html">Postar</a>
-        <a href="Perfil.html">Perfil</a>
-    </nav>
+        <nav class="navegacao-site">
+            <a href="feed.html">Feed</a>
+            <a href="Busca.html" class="link-ativo">Buscar</a>
+            <a href="postar.html">Postar</a>
+            <a href="Perfil.html">Perfil</a>
+        </nav>
     </header>
 
-    <input type="text" placeholder="Digite o que deseja buscar">
-    <button>Buscar</button> <br>
+    <main class="conteudo-busca">
 
-    <button>Filtros</button>
+        <section class="cabecalho-busca">
+            <h1>Encontre sua próxima atividade</h1>
+            <p>
+                Descubra grupos e atividades físicas perto de você.
+            </p>
+        </section>
 
-    <form>
-    <h2>Filtros</h2>
+        <section class="cartao-busca">
 
-    <label>Idade:</label>
-    <input type="number"><br>
+            <form class="formulario-busca">
+                <label for="pesquisa">O que você procura?</label>
 
-    <label>Local:</label>
-    <input type="text"><br>
+                <div class="barra-pesquisa">
+                    <input type="text" id="pesquisa" name="pesquisa"
+                           placeholder="Ex: corrida, caminhada, ciclismo">
 
-    <label>Distância:</label>
-    <select>
-        <option>Até 500m</option>
-        <option>500m - 1km</option>
-        <option>1km - 3km</option>
-        <option>3km - 5km</option>
-        <option>Mais de 5km</option>
-    </select><br>
+                    <button type="submit" class="botao botao-buscar">
+                        Buscar
+                    </button>
+                </div>
+            </form>
 
-    <label>Data:</label>
-    <input type="date"><br>
+            <section class="secao-filtros">
+                <h2>Filtros de busca</h2>
 
-    <label>Nível:</label>
-    <select>
-        <option>Iniciante</option>
-        <option>Intermediário</option>
-        <option>Avançado</option>
-    </select><br>
+                <form class="formulario-filtros">
 
-    <button>Aplicar filtros</button>
-    <button>Fechar</button>
-    </form>
+                    <div class="campo-formulario">
+                        <label for="idade">Idade:</label>
+                        <input type="number" id="idade" name="idade"
+                               min="1" max="120" placeholder="Sua idade">
+                    </div>
+
+                    <div class="campo-formulario">
+                        <label for="local-busca">Local:</label>
+                        <input type="text" id="local-busca" name="local"
+                               placeholder="Ex: Parque da Cidade">
+                    </div>
+
+                    <div class="campo-formulario">
+                        <label for="distancia">Distância:</label>
+                        <select id="distancia" name="distancia">
+                            <option value="">Qualquer distância</option>
+                            <option value="500m">Até 500 m</option>
+                            <option value="1km">500 m - 1 km</option>
+                            <option value="3km">1 km - 3 km</option>
+                            <option value="5km">3 km - 5 km</option>
+                            <option value="mais5km">Mais de 5 km</option>
+                        </select>
+                    </div>
+
+                    <div class="campo-formulario">
+                        <label for="data-busca">Data:</label>
+                        <input type="date" id="data-busca" name="data">
+                    </div>
+
+                    <div class="campo-formulario">
+                        <label for="nivel-busca">Nível:</label>
+                        <select id="nivel-busca" name="nivel">
+                            <option value="">Todos os níveis</option>
+                            <option value="iniciante">Iniciante</option>
+                            <option value="intermediario">Intermediário</option>
+                            <option value="avancado">Avançado</option>
+                        </select>
+                    </div>
+
+                    <div class="acoes-filtros">
+                        <button type="submit" class="botao botao-aplicar-filtros">
+                            Aplicar filtros
+                        </button>
+
+                        <button type="reset" class="botao botao-limpar-filtros">
+                            Limpar filtros
+                        </button>
+                    </div>
+
+                </form>
+            </section>
+        </section>
+
+        <section class="resultados-busca">
+            <h2>Atividades encontradas</h2>
+            <p>
+                As atividades disponíveis aparecerão aqui quando a busca
+                estiver conectada aos dados do sistema.
+            </p>
+        </section>
+
+    </main>
+
 </body>
 </html>

@@ -1,25 +1,94 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastre-se</title>
+    <title>Cadastro - ConectaSaúde</title>
+
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <img src="imagens/Logo_Miniatura.png" alt = "Miniatura">
-    <h2>Faça seu Cadastro na Conecta saúde</h2>
-    <form>
-        <label> Nome:</label>
-        <input type="text"> <br><br>
-        <label> Idade: </label>
-        <input type="number"><br><br>
-        <label> Email:</label>
-        <input type="email"><br><br>
-        <label> Senha: </label>
-        <input type="password"><br><br>
-        <a href="Login.html" class="Botao">Login</a>
-        
 
-    </form>
+    <main class="pagina-cadastro">
+
+        <section class="cartao-cadastro">
+
+            <img src="imagens/Logo_Miniatura.png"
+                 alt="Logo ConectaSaúde"
+                 class="logo-cadastro">
+
+            <h1>Crie sua conta no ConectaSaúde</h1>
+
+            <form class="formulario-cadastro">
+
+                <div class="campo-formulario">
+                    <label for="nome">Nome completo</label>
+                    <input
+                        type="text"
+                        id="nome"
+                        name="nome"
+                        placeholder="Digite seu nome"
+                        autocomplete="name"
+                        required
+                    >
+                </div>
+
+                <div class="campo-formulario">
+                    <label for="idade">Idade</label>
+                    <input
+                        type="number"
+                        id="idade"
+                        name="idade"
+                        placeholder="Digite sua idade"
+                        min="1"
+                        max="120"
+                        required
+                    >
+                </div>
+
+                <div class="campo-formulario">
+                    <label for="email">E-mail</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Digite seu e-mail"
+                        autocomplete="email"
+                        required
+                    >
+                </div>
+
+                <div class="campo-formulario">
+                    <label for="senha">Senha</label>
+                    <input
+                        type="password"
+                        id="senha"
+                        name="senha"
+                        placeholder="Crie uma senha"
+                        autocomplete="new-password"
+                        required
+                    >
+                </div>
+
+                <a href="Login.html" class="botao botao-cadastro">
+                    Cadastrar
+                </a>
+
+            </form>
+
+            <p class="texto-login">
+                Já possui uma conta?
+                <a href="Login.html">Faça login</a>
+            </p>
+
+            <a href="Apresentacao.html" class="link-voltar">
+                Voltar para a página inicial
+            </a>
+
+        </section>
+
+    </main>
+
 </body>
 </html>

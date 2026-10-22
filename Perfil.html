@@ -1,60 +1,96 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Perfil</title>
+    <title>Meu Perfil - ConectaSaúde</title>
+
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <header>
-    <img src="imagens/Logo_Miniatura.png" alt="Logo ConectaSaude">
 
-    <nav>
-        <a href="Feed.html">Feed</a>
-        <a href="Busca.html">Buscar</a>
-        <a href="postar.html">Postar</a>
-        <a href="Perfil.html">Perfil</a>
-    </nav>
+    <header class="cabecalho-site">
+
+        <a href="Apresentacao.html" class="link-logo">
+            <img src="imagens/Logo_Miniatura.png"
+                 alt="Logo ConectaSaúde"
+                 class="logo-site">
+        </a>
+
+        <nav class="navegacao-site">
+            <a href="Feed.html">Feed</a>
+            <a href="Busca.html">Buscar</a>
+            <a href="postar.html">Postar</a>
+            <a href="Perfil.html" class="link-ativo">Perfil</a>
+        </nav>
+
     </header>
 
-    <section>
-         <img src="imagens/Perfil.png" alt="Foto de perfil">
-         <h2>Nome de usuário</h2>
-         <p>@usuario</p>
-         <p>Descrição</p>
+    <main class="conteudo-perfil">
 
-        <a href="Editar_perfil.html">Editar perfil</a>
-    </section>
+        <section class="cartao-perfil">
 
-    <section>
-        <h2>Informações</h2>
+            <img src="imagens/Perfil.png"
+                 alt="Foto de perfil"
+                 class="foto-perfil">
 
-        <p>Atividades: Corrida, Academia e Ciclismo</p>
-        <p>Nível: Intermediário</p>
-        <p>Localização: Brasília</p>
-    </section>
+            <h1>Nome de usuário</h1>
+            <p class="nome-usuario">@usuario</p>
 
-     <section>
-        <h2>Meus eventos</h2>
+            <p class="descricao-perfil">
+                Descrição
+            </p>
 
-        <article>
-            <h3>Corrida no Parque</h3>
-            <p>Data: 12/10/2026</p>
-            <p>Horário: 07:00</p>
-            <p>Local: Parque da Cidade</p>
-        </article>
+            <a href="Editar_perfil.html" class="botao botao-editar">
+                Editar perfil
+            </a>
 
-        <article>
-            <h3>Caminhada de Domingo</h3>
-            <p>Data: 19/10/2026</p>
-            <p>Horário: 08:00</p>
-            <p>Local: Parque da Cidade</p>
-        </article>
-    </section>
+        </section>
 
-    <button>Sair da conta</button>
+        <section class="cartao-informacoes">
 
-   
+            <h2>Informações</h2>
+
+            <div class="lista-informacoes">
+                <p><strong>Atividades:</strong> Corrida, Academia e Ciclismo</p>
+                <p><strong>Nível:</strong> Intermediário</p>
+                <p><strong>Localização:</strong> Brasília</p>
+            </div>
+
+        </section>
+
+        <section class="secao-eventos">
+
+            <h2>Meus eventos</h2>
+
+            <div class="lista-eventos">
+
+                <article class="cartao-evento">
+                    <h3>Corrida no Parque</h3>
+                    <p><strong>Data:</strong> 12/10/2026</p>
+                    <p><strong>Horário:</strong> 07:00</p>
+                    <p><strong>Local:</strong> Parque da Cidade</p>
+                </article>
+
+                <article class="cartao-evento">
+                    <h3>Caminhada de Domingo</h3>
+                    <p><strong>Data:</strong> 19/10/2026</p>
+                    <p><strong>Horário:</strong> 08:00</p>
+                    <p><strong>Local:</strong> Parque da Cidade</p>
+                </article>
+
+            </div>
+
+        </section>
+
+        <div class="area-sair">
+            <button type="button" class="botao-sair">
+                Sair da conta
+            </button>
+        </div>
+
+    </main>
 
 </body>
 </html>

@@ -1,114 +1,175 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Perfil</title>
+    <title>Editar Perfil - ConectaSaude</title>
+
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-    <header>
-    <img src="imagens/Logo_Miniatura.png" alt="Logo ConectaSaude">
+    <header class="cabecalho-site">
+        <a href="Apresentacao.html" class="link-logo">
+            <img src="imagens/Logo_Miniatura.png"
+                 alt="Logo ConectaSaude"
+                 class="logo-site">
+        </a>
 
-    <nav>
-        <a href="feed.html">Feed</a>
-        <a href="Busca.html">Buscar</a>
-        <a href="postar.html">Postar</a>
-        <a href="Perfil.html">Perfil</a>
-    </nav>
+        <nav class="navegacao-site">
+            <a href="feed.html">Feed</a>
+            <a href="Busca.html">Buscar</a>
+            <a href="postar.html">Postar</a>
+            <a href="Perfil.html">Perfil</a>
+        </nav>
     </header>
 
-    <h1>Editar perfil</h1>
+    <main class="conteudo-editar-perfil">
 
-    <form>
+        <section class="cartao-editar-perfil">
 
-        <section>
+            <h1>Editar perfil</h1>
+            <p class="descricao-editar">
+                Atualize suas informações e seus interesses.
+            </p>
 
-            <h2>Foto de perfil</h2>
+            <form class="formulario-editar-perfil">
 
-            <img src="imagens/perfil.png" alt="Foto de perfil">
+                <section class="secao-editar">
+                    <h2>Foto de perfil</h2>
 
-            <br>
+                    <div class="area-foto-editar">
+                        <img src="imagens/perfil.png"
+                             alt="Foto de perfil"
+                             class="foto-editar">
 
-            <label for="foto">Alterar foto:</label>
-            <input type="file" id="foto" accept="image/png, image/jpeg">
+                        <div class="campo-formulario">
+                            <label for="foto">Alterar foto:</label>
+                            <input type="file" id="foto" name="foto"
+                                   accept="image/png, image/jpeg">
+                        </div>
+                    </div>
+                </section>
 
+                <section class="secao-editar">
+                    <h2>Informações pessoais</h2>
+
+                    <div class="campo-formulario">
+                        <label for="nome">Nome:</label>
+                        <input type="text" id="nome" name="nome"
+                               placeholder="Seu nome">
+                    </div>
+
+                    <div class="campo-formulario">
+                        <label for="usuario">Nome de usuário:</label>
+                        <input type="text" id="usuario" name="usuario"
+                               placeholder="@nomeusuario">
+                    </div>
+
+                    <div class="campo-formulario">
+                        <label for="bio">Biografia:</label>
+                        <textarea id="bio" name="bio"
+                                  placeholder="Fale um pouco sobre você"
+                                  rows="4"></textarea>
+                    </div>
+                </section>
+
+                <section class="secao-editar">
+                    <h2>Atividades de interesse</h2>
+
+                    <div class="opcoes-editar">
+                        <label class="opcao-editar">
+                            <input type="checkbox" id="corrida"
+                                   name="atividades" value="corrida">
+                            Corrida
+                        </label>
+
+                        <label class="opcao-editar">
+                            <input type="checkbox" id="caminhada"
+                                   name="atividades" value="caminhada">
+                            Caminhada
+                        </label>
+
+                        <label class="opcao-editar">
+                            <input type="checkbox" id="ciclismo"
+                                   name="atividades" value="ciclismo">
+                            Ciclismo
+                        </label>
+
+                        <label class="opcao-editar">
+                            <input type="checkbox" id="academia"
+                                   name="atividades" value="academia">
+                            Academia
+                        </label>
+
+                        <label class="opcao-editar">
+                            <input type="checkbox" id="outros"
+                            name="atividades" value="outros">
+                            Outros
+                        </label>
+                        <input type="text" id="outra-atividade"
+                        name="outra-atividade"
+                        placeholder="Qual atividade?"
+                        class="campo-outra-atividade">
+                    </div>
+                </section>
+
+                <section class="secao-editar">
+                    <h2>Nível de atividade</h2>
+
+                    <div class="opcoes-editar">
+                        <label class="opcao-editar">
+                            <input type="radio" id="iniciante"
+                                   name="nivel" value="iniciante">
+                            Iniciante
+                        </label>
+
+                        <label class="opcao-editar">
+                            <input type="radio" id="intermediario"
+                                   name="nivel" value="intermediario">
+                            Intermediário
+                        </label>
+
+                        <label class="opcao-editar">
+                            <input type="radio" id="avancado"
+                                   name="nivel" value="avancado">
+                            Avançado
+                        </label>
+                    </div>
+                </section>
+
+                <section class="secao-editar">
+                    <h2>Privacidade</h2>
+
+                    <div class="opcoes-editar">
+                        <label class="opcao-editar">
+                            <input type="radio" id="publico"
+                                   name="privacidade" value="publico">
+                            Perfil público
+                        </label>
+
+                        <label class="opcao-editar">
+                            <input type="radio" id="privado"
+                                   name="privacidade" value="privado">
+                            Perfil privado
+                        </label>
+                    </div>
+                </section>
+
+                <div class="acoes-editar">
+                    <a href="Perfil.html" class="botao botao-cancelar">
+                        Cancelar
+                    </a>
+
+                    <button type="submit" class="botao botao-salvar">
+                        Salvar alterações
+                    </button>
+                </div>
+
+            </form>
         </section>
-
-
-        <section>
-
-            <h2>Informações pessoais</h2>
-
-            <label for="nome">Nome:</label>
-            <input type="text" id="nome">
-
-
-            <label for="usuario">Nome de usuário:</label>
-            <input type="text" id="usuario" placeholder="@nomeusuario">
-
-
-            <label for="bio">Biografia:</label>
-            <textarea id="bio" placeholder="Fale um pouco sobre você"></textarea>
-
-        </section>
-
-
-        <section>
-
-            <h2>Atividades de interesse</h2>
-
-            <input type="checkbox" id="corrida">
-            <label for="corrida">Corrida</label>
-
-            <input type="checkbox" id="caminhada">
-            <label for="caminhada">Caminhada</label>
-
-            <input type="checkbox" id="ciclismo">
-            <label for="ciclismo">Ciclismo</label>
-
-            <input type="checkbox" id="academia">
-            <label for="academia">Academia</label>
-
-            <input type="checkbox" id="futebol">
-            <label for="futebol">Futebol</label>
-
-        </section>
-
-
-        <section>
-
-            <h2>Nível de atividade</h2>
-
-            <input type="radio" id="iniciante" name="nivel">
-            <label for="iniciante">Iniciante</label>
-
-            <input type="radio" id="intermediario" name="nivel">
-            <label for="intermediario">Intermediário</label>
-
-            <input type="radio" id="avancado" name="nivel">
-            <label for="avancado">Avançado</label>
-
-        </section>
-
-
-        <section>
-
-            <h2>Privacidade</h2>
-
-            <input type="radio" id="publico" name="privacidade">
-            <label for="publico">Perfil público</label>
-
-            <input type="radio" id="privado" name="privacidade">
-            <label for="privado">Perfil privado</label>
-
-        </section>
-
-
-        <button type="submit">Salvar alterações</button>
-
-    </form>
-
+    </main>
 
 </body>
 </html>

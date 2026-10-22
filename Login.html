@@ -1,21 +1,67 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login - ConectaSaúde</title>
+
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <img src="imagens/Logo_Miniatura.png" alt = "Miniatura">
-    <h2>Faça seu Login na Conecta saúde</h2>
-    <form>
-        <label> Email:</label>
-        <input type="email"><br><br>
-        <label> Senha: </label>
-        <input type="password"><br><br>
-        <!--<button type="submit">Entrar</button>-->
-        <a href="Perfil.html" class="Botao">Login</a>
 
-    </form>
+    <main class="pagina-login">
+
+        <section class="cartao-login">
+
+            <img src="imagens/Logo_Miniatura.png"
+                 alt="Logo ConectaSaúde"
+                 class="logo-login">
+
+            <h1>Faça seu login no ConectaSaúde</h1>
+
+            <form class="formulario-login">
+
+                <div class="campo-formulario">
+                    <label for="email">E-mail</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Digite seu e-mail"
+                        autocomplete="email"
+                        required
+                    >
+                </div>
+
+                <div class="campo-formulario">
+                    <label for="senha">Senha</label>
+                    <input
+                        type="password"
+                        id="senha"
+                        name="senha"
+                        placeholder="Digite sua senha"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <a href="Perfil.html" class="botao botao-login">Entrar</a>
+
+            </form>
+
+            <p class="texto-cadastro">
+                Ainda não possui cadastro?
+                <a href="Cadastro.html">Cadastre-se</a>
+            </p>
+
+            <a href="inicio.html" class="link-voltar">
+                Voltar para a página inicial
+            </a>
+
+        </section>
+
+    </main>
+
 </body>
 </html>

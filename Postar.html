@@ -1,77 +1,102 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fazer Postagem</title>
+    <title>Criar atividade - ConectaSaude</title>
+
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <header>
-    <img src="imagens/Logo_Miniatura.png" alt="Logo ConectaSaude">
 
-    <nav>
-        <a href="feed.html">Feed</a>
-        <a href="Busca.html">Buscar</a>
-        <a href="postar.html">Postar</a>
-        <a href="Perfil.html">Perfil</a>
-    </nav>
+    <header class="cabecalho-site">
+        <a href="Apresentacao.html" class="link-logo">
+            <img src="imagens/Logo_Miniatura.png"
+                 alt="Logo ConectaSaude"
+                 class="logo-site">
+        </a>
+
+        <nav class="navegacao-site">
+            <a href="feed.html">Feed</a>
+            <a href="Busca.html">Buscar</a>
+            <a href="postar.html" class="link-ativo">Postar</a>
+            <a href="Perfil.html">Perfil</a>
+        </nav>
     </header>
 
-    
+    <main class="conteudo-postagem">
 
-    <h1>Criar atividade</h1>
+        <section class="cartao-postagem">
 
-    <form>
+            <h1>Criar atividade</h1>
+            <p class="descricao-postagem">
+                Compartilhe uma atividade e convide outras pessoas para participar!
+            </p>
 
-        <label for="titulo">Título da atividade:</label>
-        <input type="text" id="titulo" placeholder="Ex: Corrida no Parque"><br>
+            <form class="formulario-postagem">
 
+                <div class="campo-formulario">
+                    <label for="titulo">Título da atividade:</label>
+                    <input type="text" id="titulo" name="titulo"
+                           placeholder="Ex: Corrida no Parque" required>
+                </div>
 
-        <label for="descricao">Descrição:</label>
-        <textarea id="descricao" placeholder="Conte um pouco sobre a atividade"></textarea><br>
+                <div class="campo-formulario">
+                    <label for="descricao">Descrição:</label>
+                    <textarea id="descricao" name="descricao"
+                              placeholder="Conte um pouco sobre a atividade"
+                              rows="4" required></textarea>
+                </div>
 
+                <div class="campo-formulario">
+                    <label for="atividade">Tipo de atividade:</label>
+                    <select id="atividade" name="atividade" required>
+                        <option value="">Selecione uma atividade</option>
+                        <option value="corrida">Corrida</option>
+                        <option value="caminhada">Caminhada</option>
+                        <option value="ciclismo">Ciclismo</option>
+                        <option value="academia">Academia</option>
+                        <option value="futebol">Futebol</option>
+                        <option value="outro">Outro</option>
+                    </select>
+                </div>
 
-        <label for="atividade">Tipo de atividade:</label>
+                <div class="campo-formulario">
+                    <label for="local">Local:</label>
+                    <input type="text" id="local" name="local"
+                           placeholder="Ex: Parque da Cidade" required>
+                </div>
 
-        <select id="atividade">
-            <option>Corrida</option>
-            <option>Caminhada</option>
-            <option>Ciclismo</option>
-            <option>Academia</option>
-            <option>Futebol</option>
-            <option>Outro</option>
-        </select><br>
+                <div class="campos-data-horario">
+                    <div class="campo-formulario">
+                        <label for="data">Data:</label>
+                        <input type="date" id="data" name="data" required>
+                    </div>
 
+                    <div class="campo-formulario">
+                        <label for="horario">Horário:</label>
+                        <input type="time" id="horario" name="horario" required>
+                    </div>
+                </div>
 
-        <label for="local">Local:</label>
-        <input type="text" id="local" placeholder="Ex: Parque da Cidade"><br>
+                <div class="campo-formulario">
+                    <label for="nivel">Nível da atividade:</label>
+                    <select id="nivel" name="nivel" required>
+                        <option value="">Selecione o nível</option>
+                        <option value="iniciante">Iniciante</option>
+                        <option value="intermediario">Intermediário</option>
+                        <option value="avancado">Avançado</option>
+                    </select>
+                </div>
 
+                <button type="submit" class="botao botao-publicar">
+                    Publicar atividade
+                </button>
 
-        <label for="data">Data:</label>
-        <input type="date" id="data"><br>
-
-
-        <label for="horario">Horário:</label>
-        <input type="time" id="horario"><br>
-
-
-        <p>Nível da atividade:</p>
-
-        <input type="radio" id="iniciante" name="nivel">
-        <label for="iniciante">Iniciante</label>
-
-        <input type="radio" id="intermediario" name="nivel">
-        <label for="intermediario">Intermediário</label>
-
-        <input type="radio" id="avancado" name="nivel">
-        <label for="avancado">Avançado</label><br>
-
-        <button type="submit">Publicar atividade</button>
-
-    </form>
-
-
-
+            </form>
+        </section>
+    </main>
 
 </body>
 </html>
