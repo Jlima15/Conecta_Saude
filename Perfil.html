@@ -35,11 +35,14 @@
                  alt="Foto de perfil"
                  class="foto-perfil">
 
-            <h1>Nome de usuário</h1>
-            <p class="nome-usuario">@usuario</p>
+            <h1 id="nome-perfil">Carregando...</h1>
 
-            <p class="descricao-perfil">
-                Descrição
+            <p class="nome-usuario" id="nome-usuario-perfil">
+                @usuario
+            </p>
+
+            <p class="descricao-perfil" id="descricao-perfil">
+                Nenhuma biografia cadastrada.
             </p>
 
             <a href="Editar_perfil.html" class="botao botao-editar">
@@ -53,9 +56,22 @@
             <h2>Informações</h2>
 
             <div class="lista-informacoes">
-                <p><strong>Atividades:</strong> Corrida, Academia e Ciclismo</p>
-                <p><strong>Nível:</strong> Intermediário</p>
-                <p><strong>Localização:</strong> Brasília</p>
+
+                <p>
+                    <strong>Atividades:</strong>
+                    <span id="atividades-perfil">Carregando...</span>
+                </p>
+
+                <p>
+                    <strong>Nível:</strong>
+                    <span id="nivel-perfil">Carregando...</span>
+                </p>
+
+                <p>
+                    <strong>Privacidade:</strong>
+                    <span id="privacidade-perfil">Carregando...</span>
+                </p>
+
             </div>
 
         </section>
@@ -85,12 +101,16 @@
         </section>
 
         <div class="area-sair">
-            <button type="button" class="botao-sair">
+            <a href="Login.html" class="botao-sair">
                 Sair da conta
-            </button>
+            </a>
         </div>
 
     </main>
+
+    <script src="js/logout.js"></script>
+    <script src="js/perfil.js"></script>
+    <script src="js/proteger-pagina.js"></script>
 
 </body>
 </html>

@@ -184,7 +184,7 @@ body{
 .logo-login{
     display: block;
     width: 100%;
-    max-width: 110px;
+    max-width: auto;
     height: auto;
     margin: 0 auto 22px;
 }
@@ -304,7 +304,7 @@ body{
 .logo-cadastro {
     display: block;
     width: 100%;
-    max-width: 100px;
+    max-width: auto;
     height: auto;
     margin: 0 auto 20px;
 }
@@ -560,6 +560,9 @@ body{
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.2s;
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
 }
 
 .botao-sair:hover {
