@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,13 +8,12 @@
 
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
     <header class="cabecalho-site">
         <a href="Apresentacao.html" class="link-logo">
-            <img src="imagens/Logo_Miniatura.png"
-                 alt="Logo ConectaSaude"
-                 class="logo-site">
+            <img src="imagens/Logo_Miniatura.png" alt="Logo ConectaSaude" class="logo-site">
         </a>
 
         <nav class="navegacao-site">
@@ -39,17 +38,17 @@
                 <section class="secao-editar">
                     <h2>Foto de perfil</h2>
 
+
                     <div class="area-foto-editar">
-                        <img src="imagens/perfil.png"
-                             alt="Foto de perfil"
-                             class="foto-editar">
+                        <img src="imagens/perfil.png" alt="Foto de perfil" class="foto-editar" id="foto-editar">
 
                         <div class="campo-formulario">
-                            <label for="foto">Alterar foto:</label>
-                            <input type="file" id="foto" name="foto"
-                                   accept="image/png, image/jpeg">
+                            <label for="foto">Alterar foto (JPG ou PNG, máximo 5 MB):</label>
+
+                            <input type="file" id="foto" name="foto" accept=".jpg,.jpeg,.png,image/jpeg,image/png">
                         </div>
                     </div>
+
                 </section>
 
                 <section class="secao-editar">
@@ -57,21 +56,17 @@
 
                     <div class="campo-formulario">
                         <label for="nome">Nome:</label>
-                        <input type="text" id="nome" name="nome"
-                               placeholder="Seu nome">
+                        <input type="text" id="nome" name="nome" placeholder="Seu nome">
                     </div>
 
                     <div class="campo-formulario">
                         <label for="usuario">Nome de usuário:</label>
-                        <input type="text" id="usuario" name="usuario"
-                               placeholder="@nomeusuario">
+                        <input type="text" id="usuario" name="usuario" placeholder="@nomeusuario">
                     </div>
 
                     <div class="campo-formulario">
                         <label for="bio">Biografia:</label>
-                        <textarea id="bio" name="bio"
-                                  placeholder="Fale um pouco sobre você"
-                                  rows="4"></textarea>
+                        <textarea id="bio" name="bio" placeholder="Fale um pouco sobre você" rows="4"></textarea>
                     </div>
                 </section>
 
@@ -80,38 +75,31 @@
 
                     <div class="opcoes-editar">
                         <label class="opcao-editar">
-                            <input type="checkbox" id="corrida"
-                                   name="atividades" value="corrida">
+                            <input type="checkbox" id="corrida" name="atividades" value="corrida">
                             Corrida
                         </label>
 
                         <label class="opcao-editar">
-                            <input type="checkbox" id="caminhada"
-                                   name="atividades" value="caminhada">
+                            <input type="checkbox" id="caminhada" name="atividades" value="caminhada">
                             Caminhada
                         </label>
 
                         <label class="opcao-editar">
-                            <input type="checkbox" id="ciclismo"
-                                   name="atividades" value="ciclismo">
+                            <input type="checkbox" id="ciclismo" name="atividades" value="ciclismo">
                             Ciclismo
                         </label>
 
                         <label class="opcao-editar">
-                            <input type="checkbox" id="academia"
-                                   name="atividades" value="academia">
+                            <input type="checkbox" id="academia" name="atividades" value="academia">
                             Academia
                         </label>
 
                         <label class="opcao-editar">
-                            <input type="checkbox" id="outros"
-                            name="atividades" value="outros">
+                            <input type="checkbox" id="outros" name="atividades" value="outros">
                             Outros
                         </label>
-                        <input type="text" id="outra-atividade"
-                        name="outra-atividade"
-                        placeholder="Qual atividade?"
-                        class="campo-outra-atividade">
+                        <input type="text" id="outra-atividade" name="outra-atividade" placeholder="Qual atividade?"
+                            class="campo-outra-atividade">
                     </div>
                 </section>
 
@@ -120,20 +108,17 @@
 
                     <div class="opcoes-editar">
                         <label class="opcao-editar">
-                            <input type="radio" id="iniciante"
-                                   name="nivel" value="iniciante">
+                            <input type="radio" id="iniciante" name="nivel" value="iniciante">
                             Iniciante
                         </label>
 
                         <label class="opcao-editar">
-                            <input type="radio" id="intermediario"
-                                   name="nivel" value="intermediario">
+                            <input type="radio" id="intermediario" name="nivel" value="intermediario">
                             Intermediário
                         </label>
 
                         <label class="opcao-editar">
-                            <input type="radio" id="avancado"
-                                   name="nivel" value="avancado">
+                            <input type="radio" id="avancado" name="nivel" value="avancado">
                             Avançado
                         </label>
                     </div>
@@ -144,14 +129,12 @@
 
                     <div class="opcoes-editar">
                         <label class="opcao-editar">
-                            <input type="radio" id="publico"
-                                   name="privacidade" value="publico">
+                            <input type="radio" id="publico" name="privacidade" value="publico">
                             Perfil público
                         </label>
 
                         <label class="opcao-editar">
-                            <input type="radio" id="privado"
-                                   name="privacidade" value="privado">
+                            <input type="radio" id="privado" name="privacidade" value="privado">
                             Perfil privado
                         </label>
                     </div>
@@ -171,7 +154,8 @@
         </section>
     </main>
 
-<script src="js/editar-perfil.js"></script>
-<script src="js/proteger-pagina.js"></script>
+    <script src="js/editar-perfil.js"></script>
+    <script src="js/proteger-pagina.js"></script>
 </body>
+
 </html>

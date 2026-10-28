@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,13 +8,12 @@
 
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
     <header class="cabecalho-site">
         <a href="Apresentacao.html" class="link-logo">
-            <img src="imagens/Logo_Miniatura.png"
-                 alt="Logo ConectaSaude"
-                 class="logo-site">
+            <img src="imagens/Logo_Miniatura.png" alt="Logo ConectaSaude" class="logo-site">
         </a>
 
         <nav class="navegacao-site">
@@ -38,15 +37,13 @@
 
                 <div class="campo-formulario">
                     <label for="titulo">Título da atividade:</label>
-                    <input type="text" id="titulo" name="titulo"
-                           placeholder="Ex: Corrida no Parque" required>
+                    <input type="text" id="titulo" name="titulo" placeholder="Ex: Corrida no Parque" required>
                 </div>
 
                 <div class="campo-formulario">
                     <label for="descricao">Descrição:</label>
-                    <textarea id="descricao" name="descricao"
-                              placeholder="Conte um pouco sobre a atividade"
-                              rows="4" required></textarea>
+                    <textarea id="descricao" name="descricao" placeholder="Conte um pouco sobre a atividade" rows="4"
+                        required></textarea>
                 </div>
 
                 <div class="campo-formulario">
@@ -64,8 +61,7 @@
 
                 <div class="campo-formulario">
                     <label for="local">Local:</label>
-                    <input type="text" id="local" name="local"
-                           placeholder="Ex: Parque da Cidade" required>
+                    <input type="text" id="local" name="local" placeholder="Ex: Parque da Cidade" required>
                 </div>
 
                 <div class="campos-data-horario">
@@ -90,6 +86,23 @@
                     </select>
                 </div>
 
+                <div class="campo-formulario">
+                    <label for="vagas">Número de vagas:</label>
+                    <input type="number" id="vagas" name="vagas" min="1" max="10000" placeholder="Ex: 20" required>
+                </div>
+
+
+                <div class="campo-formulario">
+                    <label for="idade-minima">Idade mínima recomendada:</label>
+                    <input type="number" id="idade-minima" name="idade_minima" min="0" max="120" value="0" required>
+                </div>
+
+                <div class="campo-formulario">
+                    <label for="idade-maxima">Idade máxima recomendada:</label>
+                    <input type="number" id="idade-maxima" name="idade_maxima" min="0" max="120" value="120" required>
+                </div>
+
+
                 <button type="submit" class="botao botao-publicar">
                     Publicar atividade
                 </button>
@@ -98,5 +111,9 @@
         </section>
     </main>
 
+
+    <script src="js/proteger-pagina.js"></script>
+    <script src="js/postar.js"></script>
 </body>
+
 </html>

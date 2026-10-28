@@ -1,5 +1,10 @@
 
 const formulario = document.getElementById('formulario-editar-perfil');
+const campoFoto = document.getElementById('foto');
+const imagemFoto = document.getElementById('foto-editar');
+
+const fotoPadrao = 'imagens/perfil.png';
+let fotoTemporaria = null;
 
 async function carregarDadosPerfil() {
     try {
@@ -22,7 +27,13 @@ async function carregarDadosPerfil() {
         document.getElementById('usuario').value = usuario.nome_usuario || '';
         document.getElementById('bio').value = usuario.biografia || '';
 
-        // Carrega o nível de atividade
+        // Carrega a foto já salva no perfil
+        if (usuario.foto) {
+            imagemFoto.src = `http://127.0.0.1:3000/${usuario.foto_perfil}`;
+        } else {
+            imagemFoto.src = fotoPadrao;
+        }
+
         const nivel = usuario.nivel_atividade || 'iniciante';
 
         const radioNivel = document.querySelector(
@@ -33,7 +44,6 @@ async function carregarDadosPerfil() {
             radioNivel.checked = true;
         }
 
-        // Carrega a privacidade
         const privacidade = Number(usuario.perfil_privado) === 1
             ? 'privado'
             : 'publico';
@@ -46,14 +56,12 @@ async function carregarDadosPerfil() {
             radioPrivacidade.checked = true;
         }
 
-        // Marca as atividades salvas
         const atividades = usuario.atividades || [];
 
         document.querySelectorAll('input[name="atividades"]').forEach(campo => {
             campo.checked = atividades.includes(campo.value);
         });
 
-        // Recupera a atividade personalizada
         const atividadesConhecidas = [
             'corrida',
             'caminhada',
@@ -74,6 +82,36 @@ async function carregarDadosPerfil() {
         alert('Não foi possível carregar os dados do perfil.');
     }
 }
+
+// Mostra uma prévia da foto selecionada
+campoFoto.addEventListener('change', function () {
+    const arquivo = campoFoto.files[0];
+
+    if (!arquivo) {
+        return;
+    }
+
+    const tiposPermitidos = ['image/jpeg', 'image/png'];
+
+    if (!tiposPermitidos.includes(arquivo.type)) {
+        alert('Selecione uma imagem JPG ou PNG.');
+        campoFoto.value = '';
+        return;
+    }
+
+    if (arquivo.size > 5 * 1024 * 1024) {
+        alert('A imagem deve ter no máximo 5 MB.');
+        campoFoto.value = '';
+        return;
+    }
+
+    if (fotoTemporaria) {
+        URL.revokeObjectURL(fotoTemporaria);
+    }
+
+    fotoTemporaria = URL.createObjectURL(arquivo);
+    imagemFoto.src = fotoTemporaria;
+});
 
 formulario.addEventListener('submit', async function (evento) {
     evento.preventDefault();
@@ -108,6 +146,7 @@ formulario.addEventListener('submit', async function (evento) {
         privacidadeSelecionada.value === 'privado' ? 1 : 0;
 
     try {
+        // Salva primeiro os dados textuais do perfil
         const resposta = await fetch('http://127.0.0.1:3000/meu-perfil', {
             method: 'PUT',
             credentials: 'include',
@@ -128,11 +167,50 @@ formulario.addEventListener('submit', async function (evento) {
         const resultado = await resposta.json();
 
         if (!resposta.ok) {
-            alert(resultado.mensagem);
+            alert(resultado.mensagem || 'Não foi possível salvar o perfil.');
             return;
         }
 
-        alert(resultado.mensagem);
+        // Se uma foto foi selecionada, envia separadamente
+        if (campoFoto.files.length > 0) {
+            const arquivo = campoFoto.files[0];
+
+            const tiposPermitidos = ['image/jpeg', 'image/png'];
+
+            if (!tiposPermitidos.includes(arquivo.type)) {
+                alert('Selecione uma imagem JPG ou PNG.');
+                return;
+            }
+
+            if (arquivo.size > 5 * 1024 * 1024) {
+                alert('A imagem deve ter no máximo 5 MB.');
+                return;
+            }
+
+            const dadosFoto = new FormData();
+            dadosFoto.append('foto', arquivo);
+
+            const respostaFoto = await fetch(
+                'http://127.0.0.1:3000/meu-perfil/foto',
+                {
+                    method: 'POST',
+                    credentials: 'include',
+                    body: dadosFoto
+                }
+            );
+
+            const resultadoFoto = await respostaFoto.json();
+
+            if (!respostaFoto.ok) {
+                alert(
+                    resultadoFoto.mensagem ||
+                    'Os dados foram salvos, mas não foi possível salvar a foto.'
+                );
+                return;
+            }
+        }
+
+        alert('Perfil atualizado com sucesso!');
         window.location.href = 'Perfil.html';
 
     } catch (erro) {
