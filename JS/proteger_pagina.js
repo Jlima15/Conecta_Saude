@@ -2,12 +2,25 @@
 async function verificarSessao() {
     try {
         const resposta = await fetch('http://127.0.0.1:3000/sessao', {
-            credentials: 'include'
+            credentials: 'include',
+            cache: 'no-store'
         });
 
-        if (!resposta.ok) {
+        if (resposta.status === 401) {
             window.location.href = 'Login.html';
             return;
+        }
+
+        if (!resposta.ok) {
+            console.error('Erro ao verificar sessão:', resposta.status);
+            alert('Não foi possível verificar seu login. Tente novamente.');
+            return;
+        }
+
+        const resultado = await resposta.json();
+
+        if (!resultado.autenticado) {
+            window.location.href = 'Login.html';
         }
 
     } catch (erro) {

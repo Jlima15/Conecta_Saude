@@ -445,9 +445,21 @@ async function carregarAtividades() {
             });
 
 
-            acoes.append(botaoCurtir, botaoComentar, botaoParticipar);
-            cartao.append(areaComentarios);
+            // Botão visual de denunciar
+            const botaoDenunciar = document.createElement('button');
+            botaoDenunciar.type = 'button';
+            botaoDenunciar.className = 'botao-acao botao-denunciar';
+            botaoDenunciar.textContent = 'Denunciar';
 
+            // Adiciona os botões à publicação
+            acoes.append(
+                botaoCurtir,
+                botaoComentar,
+                botaoParticipar,
+                botaoDenunciar
+            );
+
+            cartao.append(areaComentarios);
             cartao.append(autor, conteudo, acoes);
             listaFeed.append(cartao);
         });

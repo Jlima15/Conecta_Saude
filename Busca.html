@@ -21,6 +21,7 @@
             <a href="Busca.html" class="link-ativo">Buscar</a>
             <a href="postar.html">Postar</a>
             <a href="Perfil.html">Perfil</a>
+            <a href="Solicitacoes.html">Solicitações</a>
         </nav>
     </header>
 
@@ -103,6 +104,30 @@
             </section>
         </section>
 
+
+        <section class="resultados-busca">
+            <h2>Encontrar pessoas</h2>
+
+            <form id="form-buscar-usuarios" class="formulario-busca">
+                <label for="pesquisa-usuarios">
+                    Nome ou nome de usuário
+                </label>
+
+                <div class="barra-pesquisa">
+                    <input type="text" id="pesquisa-usuarios" placeholder="Ex: João ou joao123" minlength="2" required>
+
+                    <button type="submit" class="botao botao-buscar">
+                        Buscar pessoas
+                    </button>
+                </div>
+            </form>
+
+            <div id="lista-usuarios">
+                <p>Digite um nome para encontrar pessoas.</p>
+            </div>
+        </section>
+
+
         <section class="resultados-busca">
             <h2>Atividades encontradas</h2>
 
@@ -113,10 +138,9 @@
 
     </main>
 
-
-<script src="js/proteger-pagina.js"></script>
+<script src="js/usuarios.js"></script>
+<script src="js/proteger_pagina.js"></script>
 <script src="js/busca.js"></script>
-<script src="js/proteger-pagina.js"></script>
 </body>
 
 </html>

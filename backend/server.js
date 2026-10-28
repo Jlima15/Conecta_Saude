@@ -11,6 +11,7 @@ const fs = require('fs');
 const multer = require('multer');
 
 const app = express();
+
 const PORTA = 3000;
 
 const pastaFotos = path.join(__dirname, 'uploads', 'perfis');
@@ -613,7 +614,7 @@ app.post('/meu-perfil/foto', (req, res) => {
                 foto: caminhoFoto
             });
         } catch (erro) {
-            fs.unlink(req.file.path, () => {});
+            fs.unlink(req.file.path, () => { });
 
             console.error('Erro ao salvar foto de perfil:', erro.message);
 
@@ -1343,6 +1344,614 @@ app.delete('/atividades/:id', async (req, res) => {
 });
 
 
+app.post('/usuarios/:id/seguir', async (req, res) => {
+    try {
+        if (!req.session.usuario) {
+            return res.status(401).json({
+                mensagem: 'Você precisa fazer login.'
+            });
+        }
+
+        const idSeguidor = Number(req.session.usuario.id);
+        const idSeguido = Number(req.params.id);
+
+        if (!Number.isInteger(idSeguido) || idSeguido < 1) {
+            return res.status(400).json({
+                mensagem: 'Usuário inválido.'
+            });
+        }
+
+        if (idSeguidor === idSeguido) {
+            return res.status(400).json({
+                mensagem: 'Você não pode seguir a si mesmo.'
+            });
+        }
+
+        // Busca o usuário e verifica a privacidade do perfil.
+        const [usuarios] = await conexao.execute(
+            `SELECT id_usuario, perfil_privado
+             FROM Usuarios
+             WHERE id_usuario = ?`,
+            [idSeguido]
+        );
+
+        if (usuarios.length === 0) {
+            return res.status(404).json({
+                mensagem: 'Usuário não encontrado.'
+            });
+        }
+
+        // Impede interações entre contas com bloqueio.
+        const [bloqueios] = await conexao.execute(
+            `SELECT id_bloqueio
+             FROM Bloqueio
+             WHERE (id_bloqueador = ? AND id_bloqueado = ?)
+                OR (id_bloqueador = ? AND id_bloqueado = ?)
+             LIMIT 1`,
+            [idSeguidor, idSeguido, idSeguido, idSeguidor]
+        );
+
+        if (bloqueios.length > 0) {
+            return res.status(403).json({
+                mensagem: 'Não é possível seguir este usuário.'
+            });
+        }
+
+        // Verifica se já existe uma relação.
+        const [relacoes] = await conexao.execute(
+            `SELECT status
+             FROM Seguir
+             WHERE id_seguidor = ? AND id_seguido = ?`,
+            [idSeguidor, idSeguido]
+        );
+
+        if (relacoes.length > 0) {
+            const status = relacoes[0].status;
+
+            return res.status(409).json({
+                mensagem: status === 'PENDENTE'
+                    ? 'Sua solicitação já está pendente.'
+                    : 'Você já segue este usuário.',
+                status
+            });
+        }
+
+        // Perfil público aceita automaticamente.
+        // Perfil privado exige aprovação.
+        const status = Number(usuarios[0].perfil_privado) === 1
+            ? 'PENDENTE'
+            : 'ACEITO';
+
+        await conexao.execute(
+            `INSERT INTO Seguir
+                (id_seguidor, id_seguido, status)
+             VALUES (?, ?, ?)`,
+            [idSeguidor, idSeguido, status]
+        );
+
+        return res.status(201).json({
+            mensagem: status === 'PENDENTE'
+                ? 'Solicitação de seguimento enviada!'
+                : 'Agora você segue este usuário.',
+            status
+        });
+
+    } catch (erro) {
+        console.error('Erro ao seguir usuário:', erro.message);
+
+        return res.status(500).json({
+            mensagem: 'Erro ao processar o seguimento.'
+        });
+    }
+});
+
+
+app.get('/solicitacoes-seguir', async (req, res) => {
+    try {
+        if (!req.session.usuario) {
+            return res.status(401).json({
+                mensagem: 'Você precisa fazer login.'
+            });
+        }
+
+        const idUsuario = req.session.usuario.id;
+
+        const [solicitacoes] = await conexao.execute(
+            `SELECT
+                s.id_seguir,
+                s.id_seguidor,
+                s.status,
+                u.nome,
+                u.nome_usuario,
+                u.foto
+             FROM Seguir s
+             INNER JOIN Usuarios u
+                ON u.id_usuario = s.id_seguidor
+             WHERE s.id_seguido = ?
+               AND s.status = 'PENDENTE'
+             ORDER BY s.id_seguir DESC`,
+            [idUsuario]
+        );
+
+        return res.json(solicitacoes);
+
+    } catch (erro) {
+        console.error('Erro ao listar solicitações:', erro.message);
+
+        return res.status(500).json({
+            mensagem: 'Erro ao carregar solicitações.'
+        });
+    }
+});
+
+
+
+app.put('/solicitacoes-seguir/:id/aceitar', async (req, res) => {
+    try {
+        if (!req.session.usuario) {
+            return res.status(401).json({
+                mensagem: 'Você precisa fazer login.'
+            });
+        }
+
+        const idDono = Number(req.session.usuario.id);
+        const idSolicitacao = Number(req.params.id);
+
+        if (!Number.isInteger(idSolicitacao) || idSolicitacao < 1) {
+            return res.status(400).json({
+                mensagem: 'Solicitação inválida.'
+            });
+        }
+
+        const [resultado] = await conexao.execute(
+            `UPDATE Seguir
+             SET status = 'ACEITO'
+             WHERE id_seguir = ?
+               AND id_seguido = ?
+               AND status = 'PENDENTE'
+               AND NOT EXISTS (
+                   SELECT 1
+                   FROM Bloqueio b
+                   WHERE
+                       (b.id_bloqueador = Seguir.id_seguidor
+                        AND b.id_bloqueado = Seguir.id_seguido)
+                       OR
+                       (b.id_bloqueador = Seguir.id_seguido
+                        AND b.id_bloqueado = Seguir.id_seguidor)
+               )`,
+            [idSolicitacao, idDono]
+        );
+
+        if (resultado.affectedRows === 0) {
+            return res.status(404).json({
+                mensagem: 'Solicitação não encontrada ou relação bloqueada.'
+            });
+        }
+
+        return res.json({
+            mensagem: 'Solicitação aceita!'
+        });
+
+    } catch (erro) {
+        console.error('Erro ao aceitar solicitação:', erro.message);
+
+        return res.status(500).json({
+            mensagem: 'Erro ao aceitar solicitação.'
+        });
+    }
+});
+
+
+
+
+app.delete('/solicitacoes-seguir/:id/recusar', async (req, res) => {
+    try {
+        if (!req.session.usuario) {
+            return res.status(401).json({
+                mensagem: 'Você precisa fazer login.'
+            });
+        }
+
+        const idDono = Number(req.session.usuario.id);
+        const idSolicitacao = Number(req.params.id);
+
+        if (!Number.isInteger(idSolicitacao) || idSolicitacao < 1) {
+            return res.status(400).json({
+                mensagem: 'Solicitação inválida.'
+            });
+        }
+
+        const [resultado] = await conexao.execute(
+            `DELETE FROM Seguir
+             WHERE id_seguir = ?
+               AND id_seguido = ?
+               AND status = 'PENDENTE'`,
+            [idSolicitacao, idDono]
+        );
+
+        if (resultado.affectedRows === 0) {
+            return res.status(404).json({
+                mensagem: 'Solicitação pendente não encontrada.'
+            });
+        }
+
+        return res.json({
+            mensagem: 'Solicitação recusada.'
+        });
+
+    } catch (erro) {
+        console.error('Erro ao recusar solicitação:', erro.message);
+
+        return res.status(500).json({
+            mensagem: 'Erro ao recusar solicitação.'
+        });
+    }
+});
+
+
+
+app.get('/usuarios/:id/relacionamento', async (req, res) => {
+    try {
+        if (!req.session.usuario) {
+            return res.status(401).json({
+                mensagem: 'Você precisa fazer login.'
+            });
+        }
+
+        const idUsuario = Number(req.session.usuario.id);
+        const idOutro = Number(req.params.id);
+
+        if (!Number.isInteger(idOutro) || idOutro < 1) {
+            return res.status(400).json({
+                mensagem: 'Usuário inválido.'
+            });
+        }
+
+        const [usuarios] = await conexao.execute(
+            `SELECT id_usuario, perfil_privado
+             FROM Usuarios
+             WHERE id_usuario = ?`,
+            [idOutro]
+        );
+
+        if (usuarios.length === 0) {
+            return res.status(404).json({
+                mensagem: 'Usuário não encontrado.'
+            });
+        }
+
+        const [bloqueios] = await conexao.execute(
+            `SELECT id_bloqueio
+             FROM Bloqueio
+             WHERE (id_bloqueador = ? AND id_bloqueado = ?)
+                OR (id_bloqueador = ? AND id_bloqueado = ?)
+             LIMIT 1`,
+            [idUsuario, idOutro, idOutro, idUsuario]
+        );
+
+        if (bloqueios.length > 0) {
+            return res.json({
+                bloqueado: true,
+                segue: false,
+                segue_voce: false,
+                solicitacao_pendente: false,
+                total_seguidores: 0,
+                total_seguindo: 0
+            });
+        }
+
+        const [relacoes] = await conexao.execute(
+            `SELECT
+                EXISTS (
+                    SELECT 1
+                    FROM Seguir
+                    WHERE id_seguidor = ?
+                      AND id_seguido = ?
+                      AND status = 'ACEITO'
+                ) AS segue,
+
+                EXISTS (
+                    SELECT 1
+                    FROM Seguir
+                    WHERE id_seguidor = ?
+                      AND id_seguido = ?
+                      AND status = 'ACEITO'
+                ) AS segue_voce,
+
+                EXISTS (
+                    SELECT 1
+                    FROM Seguir
+                    WHERE id_seguidor = ?
+                      AND id_seguido = ?
+                      AND status = 'PENDENTE'
+                ) AS solicitacao_pendente`,
+            [
+                idUsuario, idOutro,
+                idOutro, idUsuario,
+                idUsuario, idOutro
+            ]
+        );
+
+        const [contagens] = await conexao.execute(
+            `SELECT
+                (
+                    SELECT COUNT(*)
+                    FROM Seguir
+                    WHERE id_seguido = ?
+                      AND status = 'ACEITO'
+                ) AS total_seguidores,
+
+                (
+                    SELECT COUNT(*)
+                    FROM Seguir
+                    WHERE id_seguidor = ?
+                      AND status = 'ACEITO'
+                ) AS total_seguindo`,
+            [idOutro, idOutro]
+        );
+
+        return res.json({
+            bloqueado: false,
+            perfil_privado: Boolean(usuarios[0].perfil_privado),
+            ...relacoes[0],
+            ...contagens[0]
+        });
+
+    } catch (erro) {
+        console.error('Erro ao consultar relacionamento:', erro.message);
+
+        return res.status(500).json({
+            mensagem: 'Erro ao consultar o relacionamento.'
+        });
+    }
+});
+
+
+app.get('/buscar-usuarios', async (req, res) => {
+    try {
+        if (!req.session.usuario) {
+            return res.status(401).json({
+                mensagem: 'Você precisa fazer login.'
+            });
+        }
+
+        const pesquisa = (req.query.pesquisa || '').trim();
+
+        if (pesquisa.length < 2) {
+            return res.json([]);
+        }
+
+        const termo = `%${pesquisa}%`;
+
+        const [usuarios] = await conexao.execute(
+            `SELECT
+                u.id_usuario,
+                u.nome,
+                u.nome_usuario,
+                u.foto,
+                u.perfil_privado
+             FROM Usuarios u
+             WHERE (u.nome LIKE ? OR u.nome_usuario LIKE ?)
+               AND u.id_usuario <> ?
+               AND NOT EXISTS (
+                   SELECT 1
+                   FROM Bloqueio b
+                   WHERE
+                       (b.id_bloqueador = ? AND b.id_bloqueado = u.id_usuario)
+                       OR
+                       (b.id_bloqueador = u.id_usuario AND b.id_bloqueado = ?)
+               )
+             ORDER BY u.nome
+             LIMIT 30`,
+            [
+                termo,
+                termo,
+                req.session.usuario.id,
+                req.session.usuario.id,
+                req.session.usuario.id
+            ]
+        );
+
+        return res.json(usuarios);
+
+    } catch (erro) {
+        console.error('Erro ao buscar usuários:', erro.message);
+
+        return res.status(500).json({
+            mensagem: 'Erro ao buscar usuários.'
+        });
+    }
+});
+
+
+app.get('/usuarios/:id/perfil', async (req, res) => {
+    try {
+        if (!req.session.usuario) {
+            return res.status(401).json({
+                mensagem: 'Você precisa fazer login.'
+            });
+        }
+
+        const idVisitante = Number(req.session.usuario.id);
+        const idPerfil = Number(req.params.id);
+
+        if (!Number.isInteger(idPerfil) || idPerfil < 1) {
+            return res.status(400).json({
+                mensagem: 'Usuário inválido.'
+            });
+        }
+
+        const [usuarios] = await conexao.execute(
+            `SELECT
+                id_usuario,
+                nome,
+                nome_usuario,
+                biografia,
+                nivel_atividade,
+                perfil_privado,
+                foto
+             FROM Usuarios
+             WHERE id_usuario = ?`,
+            [idPerfil]
+        );
+
+        if (usuarios.length === 0) {
+            return res.status(404).json({
+                mensagem: 'Usuário não encontrado.'
+            });
+        }
+
+        const [bloqueios] = await conexao.execute(
+            `SELECT id_bloqueio
+             FROM Bloqueio
+             WHERE (id_bloqueador = ? AND id_bloqueado = ?)
+                OR (id_bloqueador = ? AND id_bloqueado = ?)
+             LIMIT 1`,
+            [idVisitante, idPerfil, idPerfil, idVisitante]
+        );
+
+        if (bloqueios.length > 0) {
+            return res.status(403).json({
+                mensagem: 'Não é possível visualizar este perfil.'
+            });
+        }
+
+        const [relacoes] = await conexao.execute(
+            `SELECT status
+             FROM Seguir
+             WHERE id_seguidor = ?
+               AND id_seguido = ?
+             LIMIT 1`,
+            [idVisitante, idPerfil]
+        );
+
+        const segue = relacoes.some(
+            relacao => relacao.status === 'ACEITO'
+        );
+
+        const perfilPrivado =
+            Number(usuarios[0].perfil_privado) === 1;
+
+        const podeVerDetalhes =
+            idVisitante === idPerfil ||
+            !perfilPrivado ||
+            segue;
+
+        const [contagens] = await conexao.execute(
+            `SELECT
+                (SELECT COUNT(*)
+                 FROM Seguir
+                 WHERE id_seguido = ?
+                   AND status = 'ACEITO') AS total_seguidores,
+
+                (SELECT COUNT(*)
+                 FROM Seguir
+                 WHERE id_seguidor = ?
+                   AND status = 'ACEITO') AS total_seguindo`,
+            [idPerfil, idPerfil]
+        );
+
+        let atividades = [];
+
+        if (podeVerDetalhes) {
+            const [resultadoAtividades] = await conexao.execute(
+                `SELECT atividade
+                 FROM usuario_atividades
+                 WHERE id_usuario = ?`,
+                [idPerfil]
+            );
+
+            atividades = resultadoAtividades.map(
+                item => item.atividade
+            );
+        }
+
+        return res.json({
+            ...usuarios[0],
+            pode_ver_detalhes: podeVerDetalhes,
+            atividades,
+            ...contagens[0]
+        });
+
+    } catch (erro) {
+        console.error('Erro ao carregar perfil de usuário:', erro.message);
+
+        return res.status(500).json({
+            mensagem: 'Erro ao carregar o perfil.'
+        });
+    }
+});
+
+
+
+app.delete('/usuarios/:id/deixar-de-seguir', async (req, res) => {
+    
+
+    try {
+        if (!req.session.usuario) {
+            return res.status(401).json({
+                mensagem: 'Você precisa estar conectado.'
+            });
+        }
+
+        const idSeguidor = Number(req.session.usuario.id);
+        const idSeguido = Number(req.params.id);
+
+        if (
+            !Number.isInteger(idSeguido) ||
+            idSeguido <= 0 ||
+            !Number.isInteger(idSeguidor) ||
+            idSeguidor <= 0
+        ) {
+            return res.status(400).json({
+                mensagem: 'Usuário inválido.'
+            });
+        }
+
+        if (idSeguidor === idSeguido) {
+            return res.status(400).json({
+                mensagem: 'Você não pode deixar de seguir a si mesmo.'
+            });
+        }
+
+        const sql = `
+            DELETE FROM Seguir
+            WHERE id_seguidor = ?
+              AND id_seguido = ?
+              AND status = 'ACEITO'
+        `;
+
+        
+
+        const [resultado] = await conexao.execute(sql, [
+            idSeguidor,
+            idSeguido
+        ]);
+
+        
+
+        if (resultado.affectedRows === 0) {
+            return res.status(404).json({
+                mensagem: 'Você não segue este usuário.'
+            });
+        }
+
+        return res.json({
+            mensagem: 'Você deixou de seguir este usuário.'
+        });
+
+    } catch (erro) {
+        console.error('Erro ao deixar de seguir:', erro);
+
+        return res.status(500).json({
+            mensagem: 'Erro ao deixar de seguir este usuário.'
+        });
+    }
+});
+
+
+
 app.listen(PORTA, () => {
     console.log(`Servidor iniciado em http://localhost:${PORTA}`);
+   
 });

@@ -1,23 +1,14 @@
-/*Página inicial*/
 
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* Página inicial */
 
-body{
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: #f7f8fa;
-    color: #26332c;
-    line-height: 1.6;
-}
-.cabecalho_inicio{
+.cabecalho_inicio {
     width: 100%;
     text-align: center;
     padding: 30px 20px 10px;
+    background-color: #ffffff;
 }
-.logo_banner{
+
+.logo_banner {
     display: block;
     width: 100%;
     max-width: 850px;
@@ -25,6 +16,11 @@ body{
     margin: 0 auto;
     border-radius: 12px;
 }
+
+.conteudo_inicio {
+    background-color: #ffffff;
+}
+
 
 .conteudo_inicio{
     width: 90%;
@@ -243,6 +239,20 @@ body{
     cursor: pointer;
 }
 
+.botao-recuperar-senha {
+    display: block;
+    margin: 12px auto 0;
+    padding: 8px 12px;
+    background: transparent;
+    border: none;
+    color: #16834d;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.botao-recuperar-senha:hover {
+    text-decoration: underline;
+}
 
 .texto-cadastro {
     margin-top: 24px;
@@ -908,6 +918,31 @@ body{
     line-height: 1.5;
 }
 
+.botao-bloquear,
+.botao-desbloquear {
+    margin: 8px 4px 0;
+    cursor: pointer;
+}
+
+.botao-bloquear {
+    background-color: #fff1f0;
+    color: #b42318;
+    border: 1px solid #e1b5b2;
+}
+
+.botao-bloquear:hover {
+    background-color: #ffe1df;
+}
+
+.botao-desbloquear {
+    background-color: #eaf6ee;
+    color: #16834d;
+    border: 1px solid #b7ddc3;
+}
+
+.botao-desbloquear:hover {
+    background-color: #d8efdf;
+}
 .cartao-busca {
     background-color: #ffffff;
     border: 1px solid #e1e7e2;
@@ -1149,6 +1184,16 @@ body{
     margin-bottom: 12px;
 }
 
+.botao-denunciar {
+    color: #b42318;
+    border: 1px solid #e1b5b2;
+    background-color: #fff;
+}
+
+.botao-denunciar:hover {
+    background-color: #fff1f0;
+}
+
 .descricao-evento {
     color: #4c5750;
     line-height: 1.6;
@@ -1243,5 +1288,377 @@ body{
 
     .botao-participar {
         margin-left: 0;
+    }
+}
+
+
+
+/* Configurações gerais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7f5;
+    color: #333;
+}
+
+/* Cabeçalho */
+header {
+    background-color: #d8dfdc;
+    color: white;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+header h1 {
+    font-size: 26px;
+}
+
+nav {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+nav a:hover {
+    color: #d7f5e5;
+}
+
+/* Conteúdo principal */
+main {
+    max-width: 850px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+main h2 {
+    color: #16834d;
+    font-size: 28px;
+    margin-bottom: 12px;
+}
+
+main > p {
+    color: #666;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+/* Área das solicitações */
+#lista-solicitacoes {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+#mensagem-solicitacoes {
+    background-color: white;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    color: #777;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* Cartão de cada solicitação */
+.solicitacao {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.info-solicitacao {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-width: 0;
+}
+
+.foto-solicitacao {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #e0eee6;
+    flex-shrink: 0;
+}
+
+.nome-solicitacao {
+    font-size: 17px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.usuario-solicitacao {
+    color: #777;
+    font-size: 14px;
+}
+
+/* Botões */
+.acoes-solicitacao {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.acoes-solicitacao button {
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.botao-aceitar {
+    background-color: #16834d;
+    color: white;
+}
+
+.botao-aceitar:hover {
+    background-color: #16834d;
+}
+
+.botao-recusar {
+    background-color: #f0f0f0;
+    color: #444;
+}
+
+.botao-recusar:hover {
+    background-color: #e0e0e0;
+}
+
+.acoes-solicitacao button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Telas menores */
+@media (max-width: 600px) {
+    header {
+        padding: 20px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    main {
+        margin: 25px auto;
+    }
+
+    main h2 {
+        font-size: 24px;
+    }
+
+    .solicitacao {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .acoes-solicitacao {
+        width: 100%;
+    }
+
+    .acoes-solicitacao button {
+        flex: 1;
+    }
+}
+
+
+
+/* ===== Página de solicitações ===== */
+
+.conteudo-solicitacoes {
+    width: 90%;
+    max-width: 800px;
+    margin: 35px auto 50px;
+}
+
+.cabecalho-solicitacoes {
+    margin-bottom: 25px;
+}
+
+.cabecalho-solicitacoes h1 {
+    margin-bottom: 8px;
+    color: #176b43;
+    font-size: 25px;
+}
+
+.cabecalho-solicitacoes p {
+    color: #4c5750;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* Cartão principal */
+
+.cartao-solicitacoes {
+    padding: 25px 30px;
+    background-color: #ffffff;
+    border: 1px solid #e1e7e2;
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.titulo-lista-solicitacoes {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e1e7e2;
+}
+
+.titulo-lista-solicitacoes h2 {
+    color: #176b43;
+    font-size: 20px;
+}
+
+/* Lista de usuários */
+
+.lista-solicitacoes {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.item-solicitacao {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 16px;
+    border: 1px solid #e1e7e2;
+    border-radius: 12px;
+    background-color: #ffffff;
+}
+
+.foto-solicitacao {
+    width: 55px;
+    height: 55px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.informacoes-solicitacao {
+    flex: 1;
+    min-width: 0;
+}
+
+.informacoes-solicitacao h3 {
+    margin-bottom: 5px;
+    color: #176b43;
+    font-size: 16px;
+    overflow-wrap: anywhere;
+}
+
+.informacoes-solicitacao p {
+    color: #7a857d;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+/* Botões de ação */
+
+.acoes-solicitacao {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.botao-aceitar-solicitacao,
+.botao-recusar-solicitacao {
+    padding: 9px 13px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.botao-aceitar-solicitacao {
+    color: #ffffff;
+    background-color: #16834d;
+    border: 1px solid #16834d;
+}
+
+.botao-aceitar-solicitacao:hover {
+    background-color: #176b43;
+}
+
+.botao-recusar-solicitacao {
+    color: #b42318;
+    background-color: #ffffff;
+    border: 1px solid #e6b8b5;
+}
+
+.botao-recusar-solicitacao:hover {
+    background-color: #fff0ef;
+}
+
+.botao-aceitar-solicitacao:disabled,
+.botao-recusar-solicitacao:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Mensagens da página */
+
+.mensagem-solicitacoes {
+    padding: 20px 0;
+    color: #7a857d;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Adaptação para telas menores */
+
+@media (max-width: 600px) {
+    .conteudo-solicitacoes {
+        width: 92%;
+        margin-top: 22px;
+    }
+
+    .cabecalho-solicitacoes h1 {
+        font-size: 22px;
+    }
+
+    .cartao-solicitacoes {
+        padding: 22px 18px;
+    }
+
+    .item-solicitacao {
+        flex-wrap: wrap;
+        padding: 14px;
+    }
+
+    .informacoes-solicitacao {
+        flex: 1;
+    }
+
+    .acoes-solicitacao {
+        width: 100%;
+    }
+
+    .botao-aceitar-solicitacao,
+    .botao-recusar-solicitacao {
+        flex: 1;
     }
 }
