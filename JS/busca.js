@@ -24,7 +24,7 @@ async function buscarAtividades() {
 
     try {
         const resposta = await fetch(
-            `http://127.0.0.1:3000/buscar-atividades?${parametros.toString()}`,
+            `/buscar-atividades?${parametros.toString()}`,
             { credentials: 'include' }
         );
 

@@ -45,7 +45,7 @@ formulario.addEventListener('submit', async function (evento) {
 
     try {
         const resposta = await fetch(
-            'http://127.0.0.1:3000/atividades',
+            '/atividades',
             {
                 method: 'POST',
                 headers: {

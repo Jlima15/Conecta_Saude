@@ -10,7 +10,7 @@ formulario.addEventListener('submit', async function (evento) {
     const senha = document.getElementById('senha').value;
 
     try {
-        const resposta = await fetch('http://localhost:3000/cadastro', {
+        const resposta = await fetch('/cadastro', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

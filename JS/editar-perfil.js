@@ -8,7 +8,7 @@ let fotoTemporaria = null;
 
 async function carregarDadosPerfil() {
     try {
-        const resposta = await fetch('http://127.0.0.1:3000/meu-perfil', {
+        const resposta = await fetch('/meu-perfil', {
             credentials: 'include'
         });
 
@@ -29,7 +29,7 @@ async function carregarDadosPerfil() {
 
         // Carrega a foto já salva no perfil
         if (usuario.foto) {
-            imagemFoto.src = `http://127.0.0.1:3000/${usuario.foto_perfil}`;
+            imagemFoto.src = `/${usuario.foto_perfil}`;
         } else {
             imagemFoto.src = fotoPadrao;
         }
@@ -147,7 +147,7 @@ formulario.addEventListener('submit', async function (evento) {
 
     try {
         // Salva primeiro os dados textuais do perfil
-        const resposta = await fetch('http://127.0.0.1:3000/meu-perfil', {
+        const resposta = await fetch('/meu-perfil', {
             method: 'PUT',
             credentials: 'include',
             headers: {
@@ -191,7 +191,7 @@ formulario.addEventListener('submit', async function (evento) {
             dadosFoto.append('foto', arquivo);
 
             const respostaFoto = await fetch(
-                'http://127.0.0.1:3000/meu-perfil/foto',
+                '/meu-perfil/foto',
                 {
                     method: 'POST',
                     credentials: 'include',

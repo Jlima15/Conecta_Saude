@@ -4,7 +4,7 @@ const listaFeed = document.getElementById('lista-feed');
 async function carregarAtividades() {
     try {
         const resposta = await fetch(
-            'http://127.0.0.1:3000/atividades',
+            '/atividades',
             {
                 credentials: 'include'
             }
@@ -130,7 +130,7 @@ async function carregarAtividades() {
 
                     try {
                         const resposta = await fetch(
-                            `http://127.0.0.1:3000/atividades/${atividade.id_atividade}`,
+                            `/atividades/${atividade.id_atividade}`,
                             {
                                 method: 'DELETE',
                                 credentials: 'include'
@@ -193,7 +193,7 @@ async function carregarAtividades() {
 
                 try {
                     const resposta = await fetch(
-                        `http://127.0.0.1:3000/atividades/${atividade.id_atividade}/curtir`,
+                        `/atividades/${atividade.id_atividade}/curtir`,
                         {
                             method: 'POST',
                             credentials: 'include'
@@ -282,7 +282,7 @@ async function carregarAtividades() {
                 listaComentarios.replaceChildren();
 
                 const resposta = await fetch(
-                    `http://127.0.0.1:3000/atividades/${atividade.id_atividade}/comentarios`,
+                    `/atividades/${atividade.id_atividade}/comentarios`,
                     { credentials: 'include' }
                 );
 
@@ -333,7 +333,7 @@ async function carregarAtividades() {
 
                 try {
                     const resposta = await fetch(
-                        `http://127.0.0.1:3000/atividades/${atividade.id_atividade}/comentarios`,
+                        `/atividades/${atividade.id_atividade}/comentarios`,
                         {
                             method: 'POST',
                             headers: {
@@ -395,7 +395,7 @@ async function carregarAtividades() {
 
                 try {
                     const resposta = await fetch(
-                        `http://127.0.0.1:3000/atividades/${atividade.id_atividade}/participar`,
+                        `/atividades/${atividade.id_atividade}/participar`,
                         {
                             method: 'POST',
                             credentials: 'include'

@@ -10,7 +10,7 @@ async function carregarPerfil() {
 
     try {
         const respostaSessao = await fetch(
-            'http://127.0.0.1:3000/sessao',
+            '/sessao',
             { credentials: 'include' }
         );
 
@@ -26,8 +26,8 @@ async function carregarPerfil() {
         
 
         const url = proprioPerfil
-            ? 'http://127.0.0.1:3000/meu-perfil'
-            : `http://127.0.0.1:3000/usuarios/${encodeURIComponent(idPerfil)}/perfil`;
+            ? '/meu-perfil'
+            : `/usuarios/${encodeURIComponent(idPerfil)}/perfil`;
 
         const resposta = await fetch(url, {
             credentials: 'include'
@@ -52,7 +52,7 @@ async function carregarPerfil() {
 
         if (imagemPerfil) {
             imagemPerfil.src = usuario.foto
-                ? `http://127.0.0.1:3000/${usuario.foto}`
+                ? `/${usuario.foto}`
                 : 'imagens/Perfil.png';
         }
 
@@ -115,7 +115,7 @@ async function carregarPerfil() {
         }
 
         const respostaRelacao = await fetch(
-            `http://127.0.0.1:3000/usuarios/${encodeURIComponent(idPerfil)}/relacionamento`,
+            `/usuarios/${encodeURIComponent(idPerfil)}/relacionamento`,
             { credentials: 'include' }
         );
 
@@ -164,7 +164,7 @@ async function carregarPerfil() {
                     
 
                     const respostaDeixarDeSeguir = await fetch(
-                        `http://127.0.0.1:3000/usuarios/${encodeURIComponent(idPerfil)}/deixar-de-seguir`,
+                        `/usuarios/${encodeURIComponent(idPerfil)}/deixar-de-seguir`,
                         {
                             method: 'DELETE',
                             credentials: 'include'
@@ -198,7 +198,7 @@ async function carregarPerfil() {
 
             try {
                 const respostaSeguir = await fetch(
-                    `http://127.0.0.1:3000/usuarios/${encodeURIComponent(idPerfil)}/seguir`,
+                    `/usuarios/${encodeURIComponent(idPerfil)}/seguir`,
                     {
                         method: 'POST',
                         credentials: 'include'
@@ -236,7 +236,7 @@ async function carregarMeusEventos() {
 
     try {
         const resposta = await fetch(
-            'http://127.0.0.1:3000/meus-eventos',
+            '/meus-eventos',
             {
                 credentials: 'include'
             }

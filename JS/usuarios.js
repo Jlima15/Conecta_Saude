@@ -18,7 +18,7 @@ formularioUsuarios.addEventListener('submit', async (evento) => {
 
     try {
         const resposta = await fetch(
-            `http://127.0.0.1:3000/buscar-usuarios?pesquisa=${encodeURIComponent(pesquisa)}`,
+            `/buscar-usuarios?pesquisa=${encodeURIComponent(pesquisa)}`,
             { credentials: 'include' }
         );
 
@@ -46,7 +46,7 @@ formularioUsuarios.addEventListener('submit', async (evento) => {
 
             const imagem = document.createElement('img');
             imagem.src = usuario.foto
-                ? `http://127.0.0.1:3000/${usuario.foto}`
+                ? `/${usuario.foto}`
                 : 'imagens/Perfil.png';
             imagem.alt = 'Foto de perfil';
             imagem.className = 'foto-perfil';

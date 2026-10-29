@@ -1,7 +1,7 @@
 
 async function verificarSessao() {
     try {
-        const resposta = await fetch('http://127.0.0.1:3000/sessao', {
+        const resposta = await fetch('http:/sessao', {
             credentials: 'include',
             cache: 'no-store'
         });

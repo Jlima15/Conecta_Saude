@@ -6,9 +6,11 @@ const bcrypt = require('bcryptjs');
 const cors = require('cors');
 const conexao = require('./database');
 const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
 const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
+
 
 const app = express();
 
@@ -64,21 +66,35 @@ const uploadFoto = multer({
     }
 });
 
+const MySQLStoreSession = new MySQLStore({
+    host: process.env.DB_HOST,
+    port: Number(process.env.DB_PORT),
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    ssl: process.env.DB_SSL === 'true'
+        ? {
+            ca: process.env.DB_SSL_CA
+        }
+        : undefined,
+    createDatabaseTable: true
+});
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    store: MySQLStoreSession,
     cookie: {
         httpOnly: true,
         sameSite: 'lax',
-        secure: false,
+        secure: process.env.NODE_ENV === 'production',
         maxAge: 1000 * 60 * 60
     }
 }));
 
 app.use(cors({
-    origin: 'http://127.0.0.1:5500',
+    origin: true,
     credentials: true
 }));
 
@@ -1957,7 +1973,7 @@ app.delete('/usuarios/:id/deixar-de-seguir', async (req, res) => {
 
 if (require.main === module) {
     app.listen(PORTA, () => {
-        console.log(`Servidor iniciado em http://localhost:${PORTA}`);
+        console.log(`Servidor iniciado em http:///:${PORTA}`);
     });
 }
 

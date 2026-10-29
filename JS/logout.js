@@ -3,7 +3,7 @@ async function sairDaConta(evento) {
     evento.preventDefault();
 
     try {
-        const resposta = await fetch('http://127.0.0.1:3000/logout', {
+        const resposta = await fetch('/logout', {
             method: 'POST',
             credentials: 'include'
         });
