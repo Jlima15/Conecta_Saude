@@ -18,7 +18,9 @@ const PORTA = 3000;
 
 const pastaFotos = path.join(__dirname, 'uploads', 'perfis');
 
-fs.mkdirSync(pastaFotos, { recursive: true });
+if (!process.env.VERCEL) {
+    fs.mkdirSync(pastaFotos, { recursive: true });
+}
 
 app.use('/uploads', express.static(
     path.join(__dirname, 'uploads')
