@@ -1951,7 +1951,10 @@ app.delete('/usuarios/:id/deixar-de-seguir', async (req, res) => {
 
 
 
-app.listen(PORTA, () => {
-    console.log(`Servidor iniciado em http://localhost:${PORTA}`);
-   
-});
+if (require.main === module) {
+    app.listen(PORTA, () => {
+        console.log(`Servidor iniciado em http://localhost:${PORTA}`);
+    });
+}
+
+module.exports = app;
