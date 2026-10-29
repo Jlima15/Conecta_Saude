@@ -83,6 +83,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use(express.static(path.join(__dirname, '..')));
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/teste-banco', async (req, res) => {
