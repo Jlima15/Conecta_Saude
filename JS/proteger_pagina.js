@@ -1,7 +1,7 @@
 
 async function verificarSessao() {
     try {
-        const resposta = await fetch('http:/sessao', {
+        const resposta = await fetch('/sessao', {
             credentials: 'include',
             cache: 'no-store'
         });
