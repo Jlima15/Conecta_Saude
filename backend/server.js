@@ -11,7 +11,6 @@ const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
 
-
 const app = express();
 
 const PORTA = 3000;
@@ -104,9 +103,11 @@ app.use(cors({
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '..')));
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'inicio.html'));
 });
+
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/teste-banco', async (req, res) => {
@@ -260,7 +261,6 @@ app.get('/sessao', (req, res) => {
     });
 });
 
-
 app.get('/atividades', async (req, res) => {
     try {
         if (!req.session.usuario) {
@@ -288,38 +288,38 @@ app.get('/atividades', async (req, res) => {
                 (a.id_usuario = ?) AS usuario_proprietario,
 
                 (SELECT COUNT(*)
-                 FROM Curtida c
+                 FROM curtida c
                  WHERE c.id_atividade = a.id_atividade
                 ) AS total_curtidas,
 
                 (SELECT COUNT(*)
-                 FROM Comentario co
+                 FROM comentario co
                  WHERE co.id_atividade = a.id_atividade
                 ) AS total_comentarios,
 
                 (SELECT COUNT(*)
-                 FROM Inscricao i
+                 FROM inscricao i
                  WHERE i.id_atividade = a.id_atividade
                    AND TRIM(i.status_inscricao) = 'ATIVA'
                 ) AS total_inscritos,
 
                 EXISTS (
                     SELECT 1
-                    FROM Curtida c
+                    FROM curtida c
                     WHERE c.id_atividade = a.id_atividade
                       AND c.id_usuario = ?
                 ) AS usuario_curtiu,
 
                 EXISTS (
                     SELECT 1
-                    FROM Inscricao i
+                    FROM inscricao i
                     WHERE i.id_atividade = a.id_atividade
                       AND i.id_usuario = ?
                       AND TRIM(i.status_inscricao) = 'ATIVA'
                 ) AS usuario_inscrito
 
-             FROM Atividade a
-             INNER JOIN Usuarios u
+             FROM atividade a
+             INNER JOIN usuarios u
                 ON u.id_usuario = a.id_usuario
 
              ORDER BY a.data ASC, a.horario ASC`,
@@ -336,7 +336,6 @@ app.get('/atividades', async (req, res) => {
         });
     }
 });
-
 
 app.get('/meu-perfil', async (req, res) => {
     try {
@@ -383,8 +382,6 @@ app.get('/meu-perfil', async (req, res) => {
     }
 });
 
-
-
 app.post('/logout', (req, res) => {
     req.session.destroy((erro) => {
         if (erro) {
@@ -402,8 +399,6 @@ app.post('/logout', (req, res) => {
         });
     });
 });
-
-
 
 app.put('/meu-perfil', async (req, res) => {
     let conexaoAtual;
@@ -425,7 +420,6 @@ app.put('/meu-perfil', async (req, res) => {
             perfil_privado
         } = req.body;
 
-        // Verifica nome e nome de usuário
         if (
             typeof nome !== 'string' ||
             !nome.trim() ||
@@ -461,7 +455,6 @@ app.put('/meu-perfil', async (req, res) => {
             });
         }
 
-        // Lista dos níveis permitidos
         const niveisValidos = [
             'iniciante',
             'intermediario',
@@ -474,14 +467,12 @@ app.put('/meu-perfil', async (req, res) => {
             });
         }
 
-        // Verifica a privacidade
         if (![0, 1, false, true].includes(perfil_privado)) {
             return res.status(400).json({
                 mensagem: 'Selecione uma opção de privacidade válida.'
             });
         }
 
-        // Lista das atividades fixas permitidas
         const atividadesValidas = [
             'corrida',
             'caminhada',
@@ -501,7 +492,6 @@ app.put('/meu-perfil', async (req, res) => {
             });
         }
 
-        // Verifica a atividade personalizada
         const outraAtividade = typeof outra_atividade === 'string'
             ? outra_atividade.trim()
             : '';
@@ -518,11 +508,9 @@ app.put('/meu-perfil', async (req, res) => {
             });
         }
 
-        // Obtém uma conexão e inicia a transação
         conexaoAtual = await conexao.getConnection();
         await conexaoAtual.beginTransaction();
 
-        // Atualiza os dados do usuário
         await conexaoAtual.execute(
             `UPDATE usuarios
              SET nome = ?, nome_usuario = ?, biografia = ?,
@@ -538,7 +526,6 @@ app.put('/meu-perfil', async (req, res) => {
             ]
         );
 
-        // Remove as atividades antigas para salvar as atuais
         await conexaoAtual.execute(
             `DELETE FROM usuario_atividades
              WHERE id_usuario = ?`,
@@ -547,12 +534,10 @@ app.put('/meu-perfil', async (req, res) => {
 
         const atividadesParaSalvar = [...new Set(atividades)];
 
-        // Adiciona o texto personalizado, se foi preenchido
         if (atividadesParaSalvar.includes('outros') && outraAtividade) {
             atividadesParaSalvar.push(outraAtividade);
         }
 
-        // Salva as atividades selecionadas
         for (const atividade of atividadesParaSalvar) {
             await conexaoAtual.execute(
                 `INSERT INTO usuario_atividades
@@ -564,7 +549,6 @@ app.put('/meu-perfil', async (req, res) => {
 
         await conexaoAtual.commit();
 
-        // Atualiza os dados da sessão
         req.session.usuario.nome = nomeFinal;
         req.session.usuario.nomeUsuario = usuarioFinal;
 
@@ -595,7 +579,6 @@ app.put('/meu-perfil', async (req, res) => {
         }
     }
 });
-
 
 app.post('/meu-perfil/foto', (req, res) => {
     if (!req.session.usuario) {
@@ -649,7 +632,6 @@ app.post('/meu-perfil/foto', (req, res) => {
     });
 });
 
-
 app.post('/atividades', async (req, res) => {
     try {
         if (!req.session.usuario) {
@@ -687,7 +669,6 @@ app.post('/atividades', async (req, res) => {
             });
         }
 
-        // Validação da faixa etária
         if (
             !Number.isInteger(idade_minima) ||
             !Number.isInteger(idade_maxima) ||
@@ -728,7 +709,7 @@ app.post('/atividades', async (req, res) => {
         }
 
         const [resultado] = await conexao.execute(
-            `INSERT INTO Atividade
+            `INSERT INTO atividade
                 (id_usuario, titulo, descricao, tipo, local,
                  data, horario, nivel, vagas,
                  idade_minima, idade_maxima)
@@ -762,8 +743,6 @@ app.post('/atividades', async (req, res) => {
     }
 });
 
-
-
 app.post('/atividades/:id/curtir', async (req, res) => {
     try {
         if (!req.session.usuario) {
@@ -781,9 +760,8 @@ app.post('/atividades/:id/curtir', async (req, res) => {
             });
         }
 
-        // Verifica se a atividade existe.
         const [atividades] = await conexao.execute(
-            'SELECT id_atividade FROM Atividade WHERE id_atividade = ?',
+            'SELECT id_atividade FROM atividade WHERE id_atividade = ?',
             [idAtividade]
         );
 
@@ -793,10 +771,9 @@ app.post('/atividades/:id/curtir', async (req, res) => {
             });
         }
 
-        // Verifica se o usuário já curtiu.
         const [curtidas] = await conexao.execute(
             `SELECT id_curtida
-             FROM Curtida
+             FROM curtida
              WHERE id_usuario = ? AND id_atividade = ?`,
             [idUsuario, idAtividade]
         );
@@ -804,18 +781,16 @@ app.post('/atividades/:id/curtir', async (req, res) => {
         let curtiu;
 
         if (curtidas.length > 0) {
-            // Já curtiu: remove a curtida.
             await conexao.execute(
-                `DELETE FROM Curtida
+                `DELETE FROM curtida
                  WHERE id_usuario = ? AND id_atividade = ?`,
                 [idUsuario, idAtividade]
             );
 
             curtiu = false;
         } else {
-            // Ainda não curtiu: registra a curtida.
             await conexao.execute(
-                `INSERT INTO Curtida (id_usuario, id_atividade)
+                `INSERT INTO curtida (id_usuario, id_atividade)
                  VALUES (?, ?)`,
                 [idUsuario, idAtividade]
             );
@@ -823,10 +798,9 @@ app.post('/atividades/:id/curtir', async (req, res) => {
             curtiu = true;
         }
 
-        // Busca a contagem atualizada.
         const [resultado] = await conexao.execute(
             `SELECT COUNT(*) AS total_curtidas
-             FROM Curtida
+             FROM curtida
              WHERE id_atividade = ?`,
             [idAtividade]
         );
@@ -847,7 +821,6 @@ app.post('/atividades/:id/curtir', async (req, res) => {
         });
     }
 });
-
 
 app.get('/atividades/:id/comentarios', async (req, res) => {
     try {
@@ -872,8 +845,8 @@ app.get('/atividades/:id/comentarios', async (req, res) => {
                 c.data_comentario,
                 u.nome,
                 u.nome_usuario
-             FROM Comentario c
-             INNER JOIN Usuarios u
+             FROM comentario c
+             INNER JOIN usuarios u
                 ON u.id_usuario = c.id_usuario
              WHERE c.id_atividade = ?
              ORDER BY c.data_comentario ASC`,
@@ -890,7 +863,6 @@ app.get('/atividades/:id/comentarios', async (req, res) => {
         });
     }
 });
-
 
 app.post('/atividades/:id/comentarios', async (req, res) => {
     try {
@@ -917,7 +889,7 @@ app.post('/atividades/:id/comentarios', async (req, res) => {
         }
 
         const [atividades] = await conexao.execute(
-            'SELECT id_atividade FROM Atividade WHERE id_atividade = ?',
+            'SELECT id_atividade FROM atividade WHERE id_atividade = ?',
             [idAtividade]
         );
 
@@ -928,7 +900,7 @@ app.post('/atividades/:id/comentarios', async (req, res) => {
         }
 
         const [resultado] = await conexao.execute(
-            `INSERT INTO Comentario (id_usuario, id_atividade, texto)
+            `INSERT INTO comentario (id_usuario, id_atividade, texto)
              VALUES (?, ?, ?)`,
             [idUsuario, idAtividade, texto]
         );
@@ -940,8 +912,8 @@ app.post('/atividades/:id/comentarios', async (req, res) => {
                 c.data_comentario,
                 u.nome,
                 u.nome_usuario
-             FROM Comentario c
-             INNER JOIN Usuarios u
+             FROM comentario c
+             INNER JOIN usuarios u
                 ON u.id_usuario = c.id_usuario
              WHERE c.id_comentario = ?`,
             [resultado.insertId]
@@ -957,7 +929,6 @@ app.post('/atividades/:id/comentarios', async (req, res) => {
         });
     }
 });
-
 
 app.post('/atividades/:id/participar', async (req, res) => {
     try {
@@ -976,10 +947,9 @@ app.post('/atividades/:id/participar', async (req, res) => {
             });
         }
 
-        // Busca a atividade e seu limite de vagas.
         const [atividades] = await conexao.execute(
             `SELECT id_atividade, vagas
-             FROM Atividade
+             FROM atividade
              WHERE id_atividade = ?`,
             [idAtividade]
         );
@@ -992,17 +962,16 @@ app.post('/atividades/:id/participar', async (req, res) => {
 
         const [inscricoes] = await conexao.execute(
             `SELECT id_inscricao, status_inscricao
-             FROM Inscricao
+             FROM inscricao
              WHERE id_usuario = ? AND id_atividade = ?`,
             [idUsuario, idAtividade]
         );
 
         const inscricao = inscricoes[0];
 
-        // Se já está inscrito, cancela a inscrição.
         if (inscricao && inscricao.status_inscricao.trim() === 'ATIVA') {
             await conexao.execute(
-                `UPDATE Inscricao
+                `UPDATE inscricao
                  SET status_inscricao = 'CANCELADA'
                  WHERE id_inscricao = ?`,
                 [inscricao.id_inscricao]
@@ -1010,7 +979,7 @@ app.post('/atividades/:id/participar', async (req, res) => {
 
             const [contagem] = await conexao.execute(
                 `SELECT COUNT(*) AS total
-                 FROM Inscricao
+                 FROM inscricao
                  WHERE id_atividade = ?
                    AND TRIM(status_inscricao) = 'ATIVA'`,
                 [idAtividade]
@@ -1023,10 +992,9 @@ app.post('/atividades/:id/participar', async (req, res) => {
             });
         }
 
-        // Confere quantas pessoas estão inscritas atualmente.
         const [contagem] = await conexao.execute(
             `SELECT COUNT(*) AS total
-             FROM Inscricao
+             FROM inscricao
              WHERE id_atividade = ?
                AND TRIM(status_inscricao) = 'ATIVA'`,
             [idAtividade]
@@ -1038,10 +1006,9 @@ app.post('/atividades/:id/participar', async (req, res) => {
             });
         }
 
-        // Reativa uma inscrição cancelada ou cria uma nova.
         if (inscricao) {
             await conexao.execute(
-                `UPDATE Inscricao
+                `UPDATE inscricao
                  SET status_inscricao = 'ATIVA',
                      data_inscricao = CURRENT_TIMESTAMP
                  WHERE id_inscricao = ?`,
@@ -1049,7 +1016,7 @@ app.post('/atividades/:id/participar', async (req, res) => {
             );
         } else {
             await conexao.execute(
-                `INSERT INTO Inscricao
+                `INSERT INTO inscricao
                     (id_usuario, id_atividade, status_inscricao)
                  VALUES (?, ?, 'ATIVA')`,
                 [idUsuario, idAtividade]
@@ -1058,7 +1025,7 @@ app.post('/atividades/:id/participar', async (req, res) => {
 
         const [contagemAtualizada] = await conexao.execute(
             `SELECT COUNT(*) AS total
-             FROM Inscricao
+             FROM inscricao
              WHERE id_atividade = ?
                AND TRIM(status_inscricao) = 'ATIVA'`,
             [idAtividade]
@@ -1078,7 +1045,6 @@ app.post('/atividades/:id/participar', async (req, res) => {
         });
     }
 });
-
 
 app.get('/meus-eventos', async (req, res) => {
     try {
@@ -1104,14 +1070,14 @@ app.get('/meus-eventos', async (req, res) => {
                 u.nome AS nome_organizador,
                 (
                     SELECT COUNT(*)
-                    FROM Inscricao i2
+                    FROM inscricao i2
                     WHERE i2.id_atividade = a.id_atividade
                       AND TRIM(i2.status_inscricao) = 'ATIVA'
                 ) AS total_inscritos
-             FROM Inscricao i
-             INNER JOIN Atividade a
+             FROM inscricao i
+             INNER JOIN atividade a
                 ON a.id_atividade = i.id_atividade
-             INNER JOIN Usuarios u
+             INNER JOIN usuarios u
                 ON u.id_usuario = a.id_usuario
              WHERE i.id_usuario = ?
                AND TRIM(i.status_inscricao) = 'ATIVA'
@@ -1129,7 +1095,6 @@ app.get('/meus-eventos', async (req, res) => {
         });
     }
 });
-
 
 app.get('/buscar-atividades', async (req, res) => {
     try {
@@ -1248,12 +1213,12 @@ app.get('/buscar-atividades', async (req, res) => {
                 u.nome AS nome_organizador,
                 (
                     SELECT COUNT(*)
-                    FROM Inscricao i
+                    FROM inscricao i
                     WHERE i.id_atividade = a.id_atividade
                       AND TRIM(i.status_inscricao) = 'ATIVA'
                 ) AS total_inscritos
-             FROM Atividade a
-             INNER JOIN Usuarios u
+             FROM atividade a
+             INNER JOIN usuarios u
                 ON u.id_usuario = a.id_usuario
              ${where}
              ORDER BY a.data ASC, a.horario ASC`,
@@ -1270,8 +1235,6 @@ app.get('/buscar-atividades', async (req, res) => {
         });
     }
 });
-
-
 
 app.delete('/atividades/:id', async (req, res) => {
     let conexaoAtual;
@@ -1295,10 +1258,9 @@ app.delete('/atividades/:id', async (req, res) => {
         conexaoAtual = await conexao.getConnection();
         await conexaoAtual.beginTransaction();
 
-        // Confere se a atividade existe e quem é o autor.
         const [atividades] = await conexaoAtual.execute(
             `SELECT id_atividade, id_usuario
-             FROM Atividade
+             FROM atividade
              WHERE id_atividade = ?
              FOR UPDATE`,
             [idAtividade]
@@ -1312,7 +1274,6 @@ app.delete('/atividades/:id', async (req, res) => {
             });
         }
 
-        // Somente o autor pode excluir a própria publicação.
         if (Number(atividades[0].id_usuario) !== Number(idUsuario)) {
             await conexaoAtual.rollback();
 
@@ -1321,25 +1282,23 @@ app.delete('/atividades/:id', async (req, res) => {
             });
         }
 
-        // Remove os registros associados à atividade.
         await conexaoAtual.execute(
-            'DELETE FROM Curtida WHERE id_atividade = ?',
+            'DELETE FROM curtida WHERE id_atividade = ?',
             [idAtividade]
         );
 
         await conexaoAtual.execute(
-            'DELETE FROM Comentario WHERE id_atividade = ?',
+            'DELETE FROM comentario WHERE id_atividade = ?',
             [idAtividade]
         );
 
         await conexaoAtual.execute(
-            'DELETE FROM Inscricao WHERE id_atividade = ?',
+            'DELETE FROM inscricao WHERE id_atividade = ?',
             [idAtividade]
         );
 
-        // Remove a publicação.
         await conexaoAtual.execute(
-            'DELETE FROM Atividade WHERE id_atividade = ?',
+            'DELETE FROM atividade WHERE id_atividade = ?',
             [idAtividade]
         );
 
@@ -1367,7 +1326,6 @@ app.delete('/atividades/:id', async (req, res) => {
     }
 });
 
-
 app.post('/usuarios/:id/seguir', async (req, res) => {
     try {
         if (!req.session.usuario) {
@@ -1391,10 +1349,9 @@ app.post('/usuarios/:id/seguir', async (req, res) => {
             });
         }
 
-        // Busca o usuário e verifica a privacidade do perfil.
         const [usuarios] = await conexao.execute(
             `SELECT id_usuario, perfil_privado
-             FROM Usuarios
+             FROM usuarios
              WHERE id_usuario = ?`,
             [idSeguido]
         );
@@ -1405,10 +1362,9 @@ app.post('/usuarios/:id/seguir', async (req, res) => {
             });
         }
 
-        // Impede interações entre contas com bloqueio.
         const [bloqueios] = await conexao.execute(
             `SELECT id_bloqueio
-             FROM Bloqueio
+             FROM bloqueio
              WHERE (id_bloqueador = ? AND id_bloqueado = ?)
                 OR (id_bloqueador = ? AND id_bloqueado = ?)
              LIMIT 1`,
@@ -1421,10 +1377,9 @@ app.post('/usuarios/:id/seguir', async (req, res) => {
             });
         }
 
-        // Verifica se já existe uma relação.
         const [relacoes] = await conexao.execute(
             `SELECT status
-             FROM Seguir
+             FROM seguir
              WHERE id_seguidor = ? AND id_seguido = ?`,
             [idSeguidor, idSeguido]
         );
@@ -1440,14 +1395,12 @@ app.post('/usuarios/:id/seguir', async (req, res) => {
             });
         }
 
-        // Perfil público aceita automaticamente.
-        // Perfil privado exige aprovação.
         const status = Number(usuarios[0].perfil_privado) === 1
             ? 'PENDENTE'
             : 'ACEITO';
 
         await conexao.execute(
-            `INSERT INTO Seguir
+            `INSERT INTO seguir
                 (id_seguidor, id_seguido, status)
              VALUES (?, ?, ?)`,
             [idSeguidor, idSeguido, status]
@@ -1469,7 +1422,6 @@ app.post('/usuarios/:id/seguir', async (req, res) => {
     }
 });
 
-
 app.get('/solicitacoes-seguir', async (req, res) => {
     try {
         if (!req.session.usuario) {
@@ -1488,8 +1440,8 @@ app.get('/solicitacoes-seguir', async (req, res) => {
                 u.nome,
                 u.nome_usuario,
                 u.foto
-             FROM Seguir s
-             INNER JOIN Usuarios u
+             FROM seguir s
+             INNER JOIN usuarios u
                 ON u.id_usuario = s.id_seguidor
              WHERE s.id_seguido = ?
                AND s.status = 'PENDENTE'
@@ -1507,8 +1459,6 @@ app.get('/solicitacoes-seguir', async (req, res) => {
         });
     }
 });
-
-
 
 app.put('/solicitacoes-seguir/:id/aceitar', async (req, res) => {
     try {
@@ -1528,20 +1478,20 @@ app.put('/solicitacoes-seguir/:id/aceitar', async (req, res) => {
         }
 
         const [resultado] = await conexao.execute(
-            `UPDATE Seguir
+            `UPDATE seguir
              SET status = 'ACEITO'
              WHERE id_seguir = ?
                AND id_seguido = ?
                AND status = 'PENDENTE'
                AND NOT EXISTS (
                    SELECT 1
-                   FROM Bloqueio b
+                   FROM bloqueio b
                    WHERE
-                       (b.id_bloqueador = Seguir.id_seguidor
-                        AND b.id_bloqueado = Seguir.id_seguido)
+                       (b.id_bloqueador = seguir.id_seguidor
+                        AND b.id_bloqueado = seguir.id_seguido)
                        OR
-                       (b.id_bloqueador = Seguir.id_seguido
-                        AND b.id_bloqueado = Seguir.id_seguidor)
+                       (b.id_bloqueador = seguir.id_seguido
+                        AND b.id_bloqueado = seguir.id_seguidor)
                )`,
             [idSolicitacao, idDono]
         );
@@ -1565,9 +1515,6 @@ app.put('/solicitacoes-seguir/:id/aceitar', async (req, res) => {
     }
 });
 
-
-
-
 app.delete('/solicitacoes-seguir/:id/recusar', async (req, res) => {
     try {
         if (!req.session.usuario) {
@@ -1586,7 +1533,7 @@ app.delete('/solicitacoes-seguir/:id/recusar', async (req, res) => {
         }
 
         const [resultado] = await conexao.execute(
-            `DELETE FROM Seguir
+            `DELETE FROM seguir
              WHERE id_seguir = ?
                AND id_seguido = ?
                AND status = 'PENDENTE'`,
@@ -1612,8 +1559,6 @@ app.delete('/solicitacoes-seguir/:id/recusar', async (req, res) => {
     }
 });
 
-
-
 app.get('/usuarios/:id/relacionamento', async (req, res) => {
     try {
         if (!req.session.usuario) {
@@ -1633,7 +1578,7 @@ app.get('/usuarios/:id/relacionamento', async (req, res) => {
 
         const [usuarios] = await conexao.execute(
             `SELECT id_usuario, perfil_privado
-             FROM Usuarios
+             FROM usuarios
              WHERE id_usuario = ?`,
             [idOutro]
         );
@@ -1646,7 +1591,7 @@ app.get('/usuarios/:id/relacionamento', async (req, res) => {
 
         const [bloqueios] = await conexao.execute(
             `SELECT id_bloqueio
-             FROM Bloqueio
+             FROM bloqueio
              WHERE (id_bloqueador = ? AND id_bloqueado = ?)
                 OR (id_bloqueador = ? AND id_bloqueado = ?)
              LIMIT 1`,
@@ -1668,7 +1613,7 @@ app.get('/usuarios/:id/relacionamento', async (req, res) => {
             `SELECT
                 EXISTS (
                     SELECT 1
-                    FROM Seguir
+                    FROM seguir
                     WHERE id_seguidor = ?
                       AND id_seguido = ?
                       AND status = 'ACEITO'
@@ -1676,7 +1621,7 @@ app.get('/usuarios/:id/relacionamento', async (req, res) => {
 
                 EXISTS (
                     SELECT 1
-                    FROM Seguir
+                    FROM seguir
                     WHERE id_seguidor = ?
                       AND id_seguido = ?
                       AND status = 'ACEITO'
@@ -1684,7 +1629,7 @@ app.get('/usuarios/:id/relacionamento', async (req, res) => {
 
                 EXISTS (
                     SELECT 1
-                    FROM Seguir
+                    FROM seguir
                     WHERE id_seguidor = ?
                       AND id_seguido = ?
                       AND status = 'PENDENTE'
@@ -1700,14 +1645,14 @@ app.get('/usuarios/:id/relacionamento', async (req, res) => {
             `SELECT
                 (
                     SELECT COUNT(*)
-                    FROM Seguir
+                    FROM seguir
                     WHERE id_seguido = ?
                       AND status = 'ACEITO'
                 ) AS total_seguidores,
 
                 (
                     SELECT COUNT(*)
-                    FROM Seguir
+                    FROM seguir
                     WHERE id_seguidor = ?
                       AND status = 'ACEITO'
                 ) AS total_seguindo`,
@@ -1729,7 +1674,6 @@ app.get('/usuarios/:id/relacionamento', async (req, res) => {
         });
     }
 });
-
 
 app.get('/buscar-usuarios', async (req, res) => {
     try {
@@ -1754,12 +1698,12 @@ app.get('/buscar-usuarios', async (req, res) => {
                 u.nome_usuario,
                 u.foto,
                 u.perfil_privado
-             FROM Usuarios u
+             FROM usuarios u
              WHERE (u.nome LIKE ? OR u.nome_usuario LIKE ?)
                AND u.id_usuario <> ?
                AND NOT EXISTS (
                    SELECT 1
-                   FROM Bloqueio b
+                   FROM bloqueio b
                    WHERE
                        (b.id_bloqueador = ? AND b.id_bloqueado = u.id_usuario)
                        OR
@@ -1787,7 +1731,6 @@ app.get('/buscar-usuarios', async (req, res) => {
     }
 });
 
-
 app.get('/usuarios/:id/perfil', async (req, res) => {
     try {
         if (!req.session.usuario) {
@@ -1814,7 +1757,7 @@ app.get('/usuarios/:id/perfil', async (req, res) => {
                 nivel_atividade,
                 perfil_privado,
                 foto
-             FROM Usuarios
+             FROM usuarios
              WHERE id_usuario = ?`,
             [idPerfil]
         );
@@ -1827,7 +1770,7 @@ app.get('/usuarios/:id/perfil', async (req, res) => {
 
         const [bloqueios] = await conexao.execute(
             `SELECT id_bloqueio
-             FROM Bloqueio
+             FROM bloqueio
              WHERE (id_bloqueador = ? AND id_bloqueado = ?)
                 OR (id_bloqueador = ? AND id_bloqueado = ?)
              LIMIT 1`,
@@ -1842,7 +1785,7 @@ app.get('/usuarios/:id/perfil', async (req, res) => {
 
         const [relacoes] = await conexao.execute(
             `SELECT status
-             FROM Seguir
+             FROM seguir
              WHERE id_seguidor = ?
                AND id_seguido = ?
              LIMIT 1`,
@@ -1864,12 +1807,12 @@ app.get('/usuarios/:id/perfil', async (req, res) => {
         const [contagens] = await conexao.execute(
             `SELECT
                 (SELECT COUNT(*)
-                 FROM Seguir
+                 FROM seguir
                  WHERE id_seguido = ?
                    AND status = 'ACEITO') AS total_seguidores,
 
                 (SELECT COUNT(*)
-                 FROM Seguir
+                 FROM seguir
                  WHERE id_seguidor = ?
                    AND status = 'ACEITO') AS total_seguindo`,
             [idPerfil, idPerfil]
@@ -1906,11 +1849,7 @@ app.get('/usuarios/:id/perfil', async (req, res) => {
     }
 });
 
-
-
 app.delete('/usuarios/:id/deixar-de-seguir', async (req, res) => {
-    
-
     try {
         if (!req.session.usuario) {
             return res.status(401).json({
@@ -1939,20 +1878,16 @@ app.delete('/usuarios/:id/deixar-de-seguir', async (req, res) => {
         }
 
         const sql = `
-            DELETE FROM Seguir
+            DELETE FROM seguir
             WHERE id_seguidor = ?
               AND id_seguido = ?
               AND status = 'ACEITO'
         `;
 
-        
-
         const [resultado] = await conexao.execute(sql, [
             idSeguidor,
             idSeguido
         ]);
-
-        
 
         if (resultado.affectedRows === 0) {
             return res.status(404).json({
@@ -1973,11 +1908,9 @@ app.delete('/usuarios/:id/deixar-de-seguir', async (req, res) => {
     }
 });
 
-
-
 if (require.main === module) {
     app.listen(PORTA, () => {
-        console.log(`Servidor iniciado em http:///:${PORTA}`);
+        console.log(`Servidor iniciado em http://localhost:${PORTA}`);
     });
 }
 
