@@ -71,7 +71,7 @@ formulario.addEventListener('submit', async function (evento) {
         }
 
         alert('Atividade publicada com sucesso!');
-        window.location.href = 'feed.html';
+        window.location.href = 'Feed.html';
 
     } catch (erro) {
         console.error('Erro ao publicar atividade:', erro);
