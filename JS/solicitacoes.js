@@ -1,5 +1,5 @@
 
-const API = 'http:///';
+const API = window.location.origin;
 
 const listaSolicitacoes = document.getElementById('lista-solicitacoes');
 
